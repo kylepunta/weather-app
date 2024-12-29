@@ -67,7 +67,7 @@ aside {
     background-color: #f9f9f9;
     border: 1px solid #ccc;
     box-shadow: 0px 0px 2px #000;
-    color: #444;
+    color: #222;
 }
 
 .settings-header {
@@ -82,7 +82,7 @@ aside {
     align-items: center;
     justify-content: center;
     position: absolute;
-    top: 16px;
+    top: 22px;
     right: 10px;
 }
 
@@ -130,6 +130,10 @@ form {
     fill: #888;
 }
 
+.search-button:hover {
+    cursor: pointer;
+}
+
 #location:focus {
     border: none;
     outline: none;
@@ -140,5 +144,56 @@ form {
 }
 
 #active-button {
+    fill: #0e2b59;
+}
+
+.temperature-settings {
+    padding-left: 26px;
+    width: 84%;
+}
+
+.temperature-settings h3 {
+    text-align: start;
+    font-size: 1.2rem;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+    padding-left: 12px;
+}
+
+.settings-header > h3 {
+    font-size: 1.4rem;
+}
+
+.temperature-settings p {
+    font-size: 1rem;
+    padding: 4px 0px 4px 16px;
+    width: 50%;
+    margin: 0;
+    color: #666;
+}
+
+.temperature-settings p:hover {
+    cursor: pointer;
+    color: #000;
+}
+
+.tick-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tick-box > svg {
+    height: 16px;
+    width: 16px;
+    fill: #DDD;
+}
+
+.temperature {
+    display: flex;
+    margin: 6px 0px;
+}
+
+#active-setting {
     fill: #0e2b59;
 }
