@@ -1,199 +1,200 @@
-html, body {
-    height: 100%;
-    margin: 0;
+html,
+body {
+  height: 100%;
+  margin: 0;
 }
 
 body {
-    display: grid;
-    grid-template-areas: 
+  display: grid;
+  grid-template-areas:
     "header"
     "main"
     "footer";
-    grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto 1fr auto;
 }
 
 header {
-    grid-area: header;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0rem 16rem;
-    background-color: #0e2b59;
-    color: #FFF;
+  grid-area: header;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0rem 16rem;
+  background-color: #0e2b59;
+  color: #fff;
 }
 
 main {
-    grid-area: main;
-    display: flex;
-    flex-direction: column;
+  grid-area: main;
+  display: flex;
+  flex-direction: column;
 }
 
 footer {
-    grid-area: footer;
-    background-color: #0e2b59;
-    color: #FFF;
+  grid-area: footer;
+  background-color: #0e2b59;
+  color: #fff;
 }
 
 h1 {
-    text-align: center;
+  text-align: center;
 }
 
 footer > p {
-    text-align: center;
+  text-align: center;
 }
 
-.dropdown-button:hover {
-    cursor: pointer;
+.menu-button:hover {
+  cursor: pointer;
 }
 
-.dropdown-button > svg {
-    fill: #FFF;
+.menu-button > svg {
+  fill: #fff;
 }
 
 h3 {
-    text-align: center;
+  text-align: center;
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
 
 aside {
-    position: fixed;
-    height: 100%;
-    width: 20%;
-    right: 0px;
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
-    box-shadow: 0px 0px 2px #000;
-    color: #222;
+  position: fixed;
+  height: 100%;
+  width: 20%;
+  right: 0px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  box-shadow: 0px 0px 2px #000;
+  color: #222;
 }
 
 .settings-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
-.close-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 22px;
-    right: 10px;
+.close-settings-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 22px;
+  right: 10px;
 }
 
-.close-button > svg {
-    fill: #444;
+.close-settings-button > svg {
+  fill: #444;
 }
 
-.close-button:hover {
-    cursor: pointer;
+.close-settings-button:hover {
+  cursor: pointer;
 }
 
 section:first-child {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
 }
 
 form {
-    width: 30%;
+  width: 30%;
 }
 
 .search-box {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border: 2px solid #ccc;
-    border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
 }
 
 #location {
-    border: none;
-    font-size: 1.2rem;
-    width: 100%;
+  border: none;
+  font-size: 1.2rem;
+  width: 100%;
 }
 
 .search-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 6px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 8px;
 }
 
 .search-button > svg {
-    fill: #888;
+  fill: #888;
 }
 
 .search-button:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 #location:focus {
-    border: none;
-    outline: none;
+  border: none;
+  outline: none;
 }
 
 .active {
-    border: 2px solid #0e2b59;
+  border: 2px solid #0e2b59;
 }
 
 #active-button {
-    fill: #0e2b59;
+  fill: #0e2b59;
 }
 
 .temperature-settings {
-    padding-left: 26px;
-    width: 84%;
+  padding-left: 26px;
+  width: 84%;
 }
 
 .temperature-settings h3 {
-    text-align: start;
-    font-size: 1.2rem;
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 10px;
-    padding-left: 12px;
+  text-align: start;
+  font-size: 1.2rem;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  padding-left: 12px;
 }
 
 .settings-header > h3 {
-    font-size: 1.4rem;
+  font-size: 1.4rem;
 }
 
 .temperature-settings p {
-    font-size: 1rem;
-    padding: 4px 0px 4px 16px;
-    width: 50%;
-    margin: 0;
-    color: #666;
+  font-size: 1rem;
+  padding: 4px 0px 4px 16px;
+  width: 50%;
+  margin: 0;
+  color: #666;
 }
 
 .temperature-settings p:hover {
-    cursor: pointer;
-    color: #000;
+  cursor: pointer;
+  color: #000;
 }
 
 .tick-box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .tick-box > svg {
-    height: 16px;
-    width: 16px;
-    fill: #DDD;
+  height: 16px;
+  width: 16px;
+  fill: #ddd;
 }
 
 .temperature {
-    display: flex;
-    margin: 6px 0px;
+  display: flex;
+  margin: 6px 0px;
 }
 
 #active-setting {
-    fill: #0e2b59;
+  fill: #0e2b59;
 }
