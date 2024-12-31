@@ -1,3 +1,5 @@
+import { renderUI } from "./UI.js";
+
 const eventHandler = (function () {
   const menuBtn = document.querySelector(".menu-button");
   const settings = document.querySelector("aside");
@@ -8,6 +10,8 @@ const eventHandler = (function () {
   const searchInput = document.querySelector("#location");
   const searchBox = document.querySelector(".search-box");
   const searchBtn = document.querySelector("#search-button");
+  const leftArrow = document.querySelector(".left-arrow");
+  const rightArrow = document.querySelector(".right-arrow");
 
   function addMenuBtnListeners() {
     menuBtn.addEventListener("click", () => {
@@ -38,7 +42,20 @@ const eventHandler = (function () {
       searchBtn.removeAttribute("id", "active-button");
     });
   }
-  return { addMenuBtnListeners, addSettingsListeners, addSearchListeners };
+  function addArrowListeners() {
+    leftArrow.addEventListener("click", () => {
+      renderUI.previousHour();
+    });
+    rightArrow.addEventListener("click", () => {
+      renderUI.nextHour();
+    });
+  }
+  return {
+    addMenuBtnListeners,
+    addSettingsListeners,
+    addSearchListeners,
+    addArrowListeners,
+  };
 })();
 
 export { eventHandler };
