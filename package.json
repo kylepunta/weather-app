@@ -1,5 +1,6 @@
 {
   "name": "weather-app",
+  "type": "module",
   "version": "1.0.0",
   "description": "This is a webpage that fetches information about the weather in different cities across the world from an API",
   "main": "index.js",
