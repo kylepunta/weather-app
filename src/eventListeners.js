@@ -1,4 +1,5 @@
 import { renderUI } from "./UI.js";
+import { weather } from "./weather.js";
 
 const eventHandler = (function () {
   const menuBtn = document.querySelector(".menu-button");
@@ -40,6 +41,11 @@ const eventHandler = (function () {
     searchInput.addEventListener("blur", () => {
       searchBox.classList.remove("active");
       searchBtn.removeAttribute("id", "active-button");
+    });
+
+    searchBtn.addEventListener("click", () => {
+      const search = document.querySelector("#location").value;
+      weather.fetchData(search);
     });
   }
   function addArrowListeners() {

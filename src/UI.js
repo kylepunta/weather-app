@@ -112,8 +112,6 @@ const renderUI = (function () {
       for (let i = start; i <= end; i++) {
         hours[i].setAttribute("id", "active-hour");
       }
-      console.log(start);
-      console.log(end);
     }, 5000);
   }
   function previousHour() {
