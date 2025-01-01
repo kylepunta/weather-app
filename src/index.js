@@ -35,7 +35,8 @@ eventHandler.addArrowListeners();
 renderUI.renderWeeklyWeather();
 renderUI.renderCurrentWeather();
 renderUI.renderWeeklyWeatherInfo();
-renderUI.renderWorldWeatherInfo();
-// renderUI.hideCurrentWeatherInfo();
-renderUI.hideWorldWeatherInfo();
 renderUI.renderPrecipitationInfo();
+renderUI.renderWorldWeather();
+
+renderUI.hideCurrentWeatherInfo();
+// renderUI.hideWorldWeatherInfo();

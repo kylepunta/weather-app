@@ -1,11 +1,10 @@
 const renderUI = (function () {
   const parser = new DOMParser();
-  const hoursFrame = document.querySelector(".hours-frame");
   const hours = document.querySelectorAll(".hours > div");
   const hourWeatherIcons = document.querySelectorAll(".hour-weather-icon");
   const currentWeatherIcon = document.querySelector(".weather-icon");
   const weeklyWeatherInfos = document.querySelectorAll(
-    ".weekly-weather-description",
+    ".weekly-weather-description"
   );
   let start = 0;
   let end = 7;
@@ -45,14 +44,14 @@ const renderUI = (function () {
 </svg>`;
     const precipitationIcon = parser.parseFromString(
       svgString,
-      "image/svg+xml",
+      "image/svg+xml"
     ).documentElement;
     icon.appendChild(precipitationIcon);
   }
 
   function renderPrecipitationInfo() {
     const precipitationIconContainers = document.querySelectorAll(
-      ".precipitation-icon",
+      ".precipitation-icon"
     );
     precipitationIconContainers.forEach((container) => {
       renderPrecipitationIcon(container);
@@ -66,7 +65,7 @@ const renderUI = (function () {
     }
   }
 
-  function renderCurrentWeatherInfo() {
+  function showCurrentWeatherInfo() {
     const sections = document.querySelectorAll("section");
     for (let i = 1; i < sections.length - 1; i++) {
       sections[i].removeAttribute("id", "hidden");
@@ -77,7 +76,7 @@ const renderUI = (function () {
     const section = document.querySelector("section:last-of-type");
     section.setAttribute("id", "hidden");
   }
-  function renderWorldWeatherInfo() {
+  function showWorldWeatherInfo() {
     const section = document.querySelector("section:last-of-type");
     section.removeAttribute("id", "hidden");
   }
@@ -149,10 +148,10 @@ const renderUI = (function () {
   }
   function renderWeeklyWeather() {
     const weeklyWeatherTemperatures = document.querySelectorAll(
-      ".weekly-temperature",
+      ".weekly-temperature"
     );
     const weeklyWeatherIcons = document.querySelectorAll(
-      ".weekly-weather-icon",
+      ".weekly-weather-icon"
     );
     weeklyWeatherTemperatures.forEach((dayTemperature) => {
       const temp = document.createElement("p");
@@ -161,6 +160,29 @@ const renderUI = (function () {
     });
     weeklyWeatherIcons.forEach((icon) => {
       renderRainIcon(icon);
+    });
+  }
+  function renderWorldWeather() {
+    const weatherIcons = document.querySelectorAll(".world-city-icon");
+    const weatherTemps = document.querySelectorAll(".world-city-temperature");
+    const weatherInfos = document.querySelectorAll(".world-city-info");
+    weatherIcons.forEach((icon) => {
+      renderSunnyIcon(icon);
+    });
+
+    weatherTemps.forEach((temp) => {
+      const p = document.createElement("p");
+      p.textContent = "10°";
+      const unit = document.createElement("p");
+      unit.textContent = "C";
+      temp.appendChild(p);
+      temp.appendChild(unit);
+    });
+
+    weatherInfos.forEach((info) => {
+      const p = document.createElement("p");
+      p.textContent = "Sunny";
+      info.appendChild(p);
     });
   }
   function renderRainIcon(container) {
@@ -255,7 +277,7 @@ const renderUI = (function () {
 </svg>`;
     const rainIcon = parser.parseFromString(
       svgString,
-      "image/svg+xml",
+      "image/svg+xml"
     ).documentElement;
 
     container.appendChild(rainIcon);
@@ -436,7 +458,7 @@ const renderUI = (function () {
 </svg>`;
     const sunnyCloudyIcon = parser.parseFromString(
       svgString,
-      "image/svg+xml",
+      "image/svg+xml"
     ).documentElement;
     icon.appendChild(sunnyCloudyIcon);
   }
@@ -941,7 +963,7 @@ const renderUI = (function () {
 </svg>`;
     const cloudyIcon = parser.parseFromString(
       svgString,
-      "image/svg+xml",
+      "image/svg+xml"
     ).documentElement;
     icon.appendChild(cloudyIcon);
   }
@@ -1467,7 +1489,7 @@ const renderUI = (function () {
 </svg>`;
     const sunnyIcon = parser.parseFromString(
       svgString,
-      "image/svg+xml",
+      "image/svg+xml"
     ).documentElement;
     icon.appendChild(sunnyIcon);
   }
@@ -1476,29 +1498,6 @@ const renderUI = (function () {
       const weatherInfo = document.createElement("p");
       weatherInfo.textContent = "Rainy";
       info.appendChild(weatherInfo);
-    });
-  }
-  function renderWorldWeatherInfo() {
-    const weatherIcons = document.querySelectorAll(".world-city-icon");
-    const weatherTemps = document.querySelectorAll(".world-city-temperature");
-    const weatherInfos = document.querySelectorAll(".world-city-info");
-    weatherIcons.forEach((icon) => {
-      renderSunnyIcon(icon);
-    });
-
-    weatherTemps.forEach((temp) => {
-      const p = document.createElement("p");
-      p.textContent = "10°";
-      const unit = document.createElement("p");
-      unit.textContent = "C";
-      temp.appendChild(p);
-      temp.appendChild(unit);
-    });
-
-    weatherInfos.forEach((info) => {
-      const p = document.createElement("p");
-      p.textContent = "Sunny";
-      info.appendChild(p);
     });
   }
   return {
@@ -1513,11 +1512,12 @@ const renderUI = (function () {
     renderCurrentWeather,
     renderWeeklyWeatherInfo,
     renderSunnyIcon,
-    renderWorldWeatherInfo,
-    renderCurrentWeatherInfo,
+    showWorldWeatherInfo,
+    showCurrentWeatherInfo,
     hideWorldWeatherInfo,
     renderPrecipitationIcon,
     renderPrecipitationInfo,
+    renderWorldWeather,
   };
 })();
 
