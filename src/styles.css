@@ -4,6 +4,10 @@ body {
   margin: 0;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   display: grid;
   grid-template-areas:
@@ -57,7 +61,8 @@ h3 {
   text-align: center;
 }
 
-.hidden {
+.hidden,
+#hidden {
   display: none;
 }
 
@@ -102,7 +107,7 @@ section:first-child {
   justify-content: center;
   height: 200px;
   box-shadow: 0px 0px 4px #0e2b59;
-  margin-bottom: 34px;
+  margin-bottom: 44px;
   background-color: #ebf1ff;
 }
 
@@ -240,7 +245,8 @@ section:nth-child(3) {
 }
 
 .current-time {
-  padding-right: 16px;
+  padding-right: 30px;
+  font-size: 1.1rem;
 }
 
 .hourly-weather-container {
@@ -279,6 +285,10 @@ section:nth-child(3) {
   width: 34%;
   border-radius: 10px;
   background-color: #fff;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 500px;
 }
 
 .weekly-weather-header {
@@ -287,6 +297,9 @@ section:nth-child(3) {
   gap: 10px;
   justify-content: space-between;
   border-bottom: 1px solid #ccc;
+  position: sticky;
+  top: 0;
+  background-color: white;
 }
 
 .weekly-weather-info {
@@ -430,8 +443,8 @@ p {
 
 .left-arrow svg,
 .right-arrow svg {
-  width: 40px;
-  height: 40px;
+  width: 55px;
+  height: 55px;
   fill: #0e2b59;
   padding: 10px;
 }
@@ -459,7 +472,7 @@ p {
 
 .weekly-weather-info > div {
   border-bottom: 1px solid #ccc;
-  padding: 20px 0px;
+  padding: 8px 0px;
   display: flex;
   align-items: center;
 }
@@ -496,7 +509,7 @@ p {
 section:nth-child(2) {
   display: flex;
   align-items: center;
-  margin-bottom: 34px;
+  margin-bottom: 44px;
   padding: 0px 60px;
 }
 
@@ -513,9 +526,13 @@ section:nth-child(2) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 38%;
-  border-bottom: 4px groove #c4ddff;
-  border-radius: 5px;
+  /* border-bottom: 4px groove #c4ddff; */
+  border-radius: 16px;
+  /* border-right: 4px groove #c4ddff; */
+  margin-bottom: 10px;
+  padding: 0px 140px;
+  /* background-color: #ebf1ff; */
+  box-shadow: 3px 3px 8px #8ab7ff;
 }
 
 #city-country {
@@ -524,7 +541,10 @@ section:nth-child(2) {
 }
 
 #city-country > div:nth-child(1) {
-  width: 86%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
 
 .city-name > h4:nth-child(1) {
@@ -540,11 +560,13 @@ section:nth-child(2) {
 .city-name > p:nth-child(2) {
   font-size: 1.2rem;
   flex: 3;
+  padding-left: 16px;
 }
 
 .country-name > p:nth-child(2) {
   font-size: 1.2rem;
   flex: 3;
+  padding-left: 16px;
 }
 
 section:nth-child(4) {
@@ -555,22 +577,26 @@ section:nth-child(4) {
   gap: 40px;
 }
 
-.random-weather-container {
+.world-weather-container {
   border: 1px solid #ccc;
   background-color: white;
-  width: 60%;
-  border-radius: 10px;
+  /* width: 60%; */
+  border-radius: 16px;
+  margin: 0px 40px;
+  display: flex;
+  flex-direction: column;
 }
 
-.random-weather-header {
+.world-weather-header {
   padding-left: 16px;
-}
-
-.random-weather-container > div {
   border-bottom: 1px solid #ccc;
 }
 
-.random-weather-container > div:not(:first-child) {
+/* .world-weather-container > div {
+  border-bottom: 1px solid #ccc;
+}
+
+.world-weather-container > div:not(:first-child) {
   padding: 12px 0px;
   display: flex;
   font-size: 1.2rem;
@@ -583,32 +609,274 @@ section:nth-child(4) {
   flex: 1;
 }
 
-.random-city-weather-icon {
+.world-weather-icon {
   flex: 1;
 }
 
-.random-city-weather-temperature {
+.world-weather-temperature {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.random-city-weather-info {
+.world-weather-info {
   flex: 2;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.random-city-weather-icon svg {
+.world-weather-icon svg {
   width: 85px;
   height: 85px;
 }
 
-.random-city-weather-icon {
+.world-weather-icon {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+ */
+#world-weather {
+  margin-bottom: 34px;
+}
+
+.world-cities {
+  display: flex;
+  gap: 30px;
+  padding: 30px;
+}
+
+.world-city {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  padding: 12px 0px;
+  border: 1px solid #ccc;
+  border-radius: 16px;
+}
+
+.world-city-name > p,
+.world-city-temperature > p,
+.world-city-info > p {
+  text-align: center;
+}
+
+.world-city-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.world-city-icon > svg {
+  min-width: 120px;
+  min-height: 120px;
+}
+
+.world-city-name > p {
+  padding: 8px 0px;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.world-city-temperature > p,
+.world-city-info > p {
+  font-size: 1.1rem;
+}
+
+.world-city-info > p {
+  padding-bottom: 10px;
+}
+
+.world-city-name {
+  grid-row: 1 / 2;
+  grid-column: 1 / -1;
+}
+
+.world-city-info {
+  grid-row: 3 / 4;
+  grid-column: 1 / -1;
+}
+
+.world-city-temperature {
+  display: flex;
+  align-items: center;
+}
+
+.world-city-temperature > p:first-child {
+  font-size: 3rem;
+}
+
+.world-city-temperature > p:last-child {
+  font-size: 1.2rem;
+  color: #444;
+  position: relative;
+  top: 15px;
+  right: 16px;
+}
+
+.world-weather-header > h4 {
+  font-size: 1.2rem;
+  padding-left: 16px;
+}
+
+footer {
+  padding: 10px 0px;
+}
+
+.precipitation-container {
+  border: 1px solid #ccc;
+  background-color: white;
+  border-radius: 16px;
+  min-width: 425px;
+  max-height: 500px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.sun-container {
+  border: 1px solid #ccc;
+  background-color: white;
+  border-radius: 16px;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-width: 423px;
+}
+
+.precipitation-info > div {
+  min-height: 62px;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  padding: 8px 0px;
+}
+
+.precipitation-header > h4 {
+  margin: 21.28px 40px;
+}
+
+.sun-header > h4 {
+  margin: 21.28px 40px 21.28px 20px;
+}
+
+.precipitation-header {
+  border-bottom: 1px solid #ccc;
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+}
+.precipitation-day > p {
+  padding-left: 20px;
+}
+
+.precipitation-icon > svg {
+  fill: #002c71;
+  margin: 15px 0px;
+}
+
+.precipitation-day {
+  flex: 1;
+}
+
+.precipitation-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.precipitation-chance {
+  flex: 3;
+}
+
+.precipitation-chance > p {
+  /* padding-left: 20px; */
+  font-size: 1.1rem;
+}
+
+.weekly-weather-icon > svg {
+  margin: 1px 0px;
+}
+
+.sun-header {
+  border-bottom: 1px solid #ccc;
+}
+
+.sun-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.sunrise,
+.sunset {
+  display: flex;
+  align-items: center;
+}
+
+.sunrise-icon > svg,
+.sunset-icon > svg {
+  margin: 20px;
+}
+
+.sunrise,
+.sunset {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.precipitation-day > p {
+  padding-left: 20px;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.precipitation-info > div {
+  min-height: 62px;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  padding: 8px 0px;
+  gap: 30px;
+}
+
+.precipitation-day {
+  flex: 1;
+  min-width: 70px;
+}
+
+.weekly-weather-info > div:last-child,
+.precipitation-info > div:last-child {
+  border-bottom: none;
+}
+
+.sunrise {
+  border-bottom: 1px solid #ccc;
+}
+
+.sunrise-time,
+.sunset-time {
+  font-size: 1.1rem;
+}
+
+.weekly-weather-header h4,
+.precipitation-header h4,
+.current-weather-header h4,
+.hourly-weather-header h4 {
+  margin-left: 20px;
+}
+
+.hourly-weather-header p {
+  padding-right: 20px;
+  font-size: 1.1rem;
+}
+
+.weekly-weather-header p {
+  font-size: 1.1rem;
+  padding-right: 12px;
 }

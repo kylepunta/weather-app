@@ -5,10 +5,82 @@ const renderUI = (function () {
   const hourWeatherIcons = document.querySelectorAll(".hour-weather-icon");
   const currentWeatherIcon = document.querySelector(".weather-icon");
   const weeklyWeatherInfos = document.querySelectorAll(
-    ".weekly-weather-description"
+    ".weekly-weather-description",
   );
   let start = 0;
   let end = 7;
+
+  function renderPrecipitationIcon(icon) {
+    const svgString = `<svg fill="#000000" height="40px" width="60px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+	 viewBox="0 0 476 476" xml:space="preserve">
+<g transform="translate(0 -540.36)">
+	<g>
+		<g>
+			<path d="M302.2,839.66L302.2,839.66c39.7,0,77.1-15.7,105.4-44.1c28.5-28.5,44.1-66.2,44.1-106.1c0-82.2-67.1-149.1-149.6-149.1
+				c-29.4,0-57.8,8.4-82.2,24.2c-21.7,14.1-39.3,33.6-51.2,56.6c-10.2-3.1-20.7-4.6-32.6-4.6c-29.9,0-57.9,11.4-79,32.3
+				c-21.2,21-32.9,49.1-32.9,79.2c0,61.6,50.2,111.6,111.9,111.6H302.2z M44.2,728.16c0-50.5,41.2-91.6,91.9-91.6v0
+				c12.7,0,23.5,2,33.9,6.4c5,2.1,10.8-0.2,13-5.2c20.7-47,67.5-77.3,119.2-77.3c71.5,0,129.6,57.9,129.6,129.1
+				c0,71.8-58.1,130.2-129.6,130.2H136.1C85.4,819.76,44.2,778.66,44.2,728.16z"/>
+			<path d="M141.2,885.66l-24.5,25.4c-3.8,3.9-3.7,10.3,0.3,14.1c1.9,1.9,4.4,2.8,6.9,2.8c2.6,0,5.2-1,7.2-3.1l24.5-25.4
+				c3.8-3.9,3.7-10.3-0.3-14.1C151.4,881.56,145,881.66,141.2,885.66z"/>
+			<path d="M243.1,885.66l-24.5,25.4c-3.8,3.9-3.7,10.3,0.3,14.1c1.9,1.9,4.4,2.8,6.9,2.8c2.6,0,5.2-1,7.2-3.1l24.5-25.4
+				c3.8-3.9,3.7-10.3-0.3-14.1C253.3,881.56,246.9,881.66,243.1,885.66z"/>
+			<path d="M345,885.66l-24.5,25.4c-3.8,3.9-3.7,10.3,0.3,14.1c1.9,1.9,4.4,2.8,6.9,2.8c2.6,0,5.2-1,7.2-3.1l24.5-25.4
+				c3.8-3.9,3.7-10.3-0.3-14.1C355.2,881.56,348.8,881.66,345,885.66z"/>
+			<path d="M460.9,885.36c-3.9-3.8-10.3-3.7-14.1,0.3l-24.5,25.4c-3.8,3.9-3.7,10.3,0.3,14.1c1.9,1.9,4.4,2.8,6.9,2.8
+				c2.7,0,5.3-1,7.2-3.1l24.5-25.4C465,895.56,464.9,889.16,460.9,885.36z"/>
+			<path d="M39.3,885.66l-24.5,25.4c-3.8,3.9-3.7,10.3,0.3,14.1c1.9,1.9,4.4,2.8,6.9,2.8c2.6,0,5.2-1,7.2-3.1l24.5-25.4
+				c3.8-3.9,3.7-10.3-0.3-14.1C49.5,881.56,43.1,881.66,39.3,885.66z"/>
+			<path d="M192.2,974.96l-24.5,24.4c-3.9,3.9-3.9,10.2,0,14.1c2,1.9,4.5,2.9,7.1,2.9c2.6,0,5.1-1,7-2.9l24.5-24.4
+				c3.9-3.9,3.9-10.2,0-14.1C202.4,971.06,196.1,971.06,192.2,974.96z"/>
+			<path d="M294.1,974.96l-24.5,24.4c-3.9,3.9-3.9,10.2,0,14.1c2,1.9,4.5,2.9,7.1,2.9c2.6,0,5.1-1,7-2.9l24.5-24.4
+				c3.9-3.9,3.9-10.2,0-14.1C304.3,971.06,298,971.06,294.1,974.96z"/>
+			<path d="M396,974.96l-24.5,24.4c-3.9,3.9-3.9,10.2,0,14.1c2,1.9,4.5,2.9,7.1,2.9c2.6,0,5.1-1,7-2.9l24.5-24.4
+				c3.9-3.9,3.9-10.2,0-14.1C406.2,971.06,399.9,971.06,396,974.96z"/>
+			<path d="M90.3,974.96l-24.5,24.4c-3.9,3.9-3.9,10.2,0,14.1c2,1.9,4.5,2.9,7.1,2.9c2.6,0,5.2-1,7-2.9l24.5-24.4
+				c3.9-3.9,3.9-10.2,0-14.1C100.5,971.06,94.2,971.06,90.3,974.96z"/>
+		</g>
+	</g>
+</g>
+</svg>`;
+    const precipitationIcon = parser.parseFromString(
+      svgString,
+      "image/svg+xml",
+    ).documentElement;
+    icon.appendChild(precipitationIcon);
+  }
+
+  function renderPrecipitationInfo() {
+    const precipitationIconContainers = document.querySelectorAll(
+      ".precipitation-icon",
+    );
+    precipitationIconContainers.forEach((container) => {
+      renderPrecipitationIcon(container);
+    });
+  }
+
+  function hideCurrentWeatherInfo() {
+    const sections = document.querySelectorAll("section");
+    for (let i = 1; i < sections.length - 1; i++) {
+      sections[i].setAttribute("id", "hidden");
+    }
+  }
+
+  function renderCurrentWeatherInfo() {
+    const sections = document.querySelectorAll("section");
+    for (let i = 1; i < sections.length - 1; i++) {
+      sections[i].removeAttribute("id", "hidden");
+    }
+  }
+
+  function hideWorldWeatherInfo() {
+    const section = document.querySelector("section:last-of-type");
+    section.setAttribute("id", "hidden");
+  }
+  function renderWorldWeatherInfo() {
+    const section = document.querySelector("section:last-of-type");
+    section.removeAttribute("id", "hidden");
+  }
 
   function renderCurrentWeather() {
     renderSunnyCloudyIcon(currentWeatherIcon);
@@ -77,10 +149,10 @@ const renderUI = (function () {
   }
   function renderWeeklyWeather() {
     const weeklyWeatherTemperatures = document.querySelectorAll(
-      ".weekly-temperature"
+      ".weekly-temperature",
     );
     const weeklyWeatherIcons = document.querySelectorAll(
-      ".weekly-weather-icon"
+      ".weekly-weather-icon",
     );
     weeklyWeatherTemperatures.forEach((dayTemperature) => {
       const temp = document.createElement("p");
@@ -183,7 +255,7 @@ const renderUI = (function () {
 </svg>`;
     const rainIcon = parser.parseFromString(
       svgString,
-      "image/svg+xml"
+      "image/svg+xml",
     ).documentElement;
 
     container.appendChild(rainIcon);
@@ -364,7 +436,7 @@ const renderUI = (function () {
 </svg>`;
     const sunnyCloudyIcon = parser.parseFromString(
       svgString,
-      "image/svg+xml"
+      "image/svg+xml",
     ).documentElement;
     icon.appendChild(sunnyCloudyIcon);
   }
@@ -869,7 +941,7 @@ const renderUI = (function () {
 </svg>`;
     const cloudyIcon = parser.parseFromString(
       svgString,
-      "image/svg+xml"
+      "image/svg+xml",
     ).documentElement;
     icon.appendChild(cloudyIcon);
   }
@@ -1395,7 +1467,7 @@ const renderUI = (function () {
 </svg>`;
     const sunnyIcon = parser.parseFromString(
       svgString,
-      "image/svg+xml"
+      "image/svg+xml",
     ).documentElement;
     icon.appendChild(sunnyIcon);
   }
@@ -1407,11 +1479,9 @@ const renderUI = (function () {
     });
   }
   function renderWorldWeatherInfo() {
-    const weatherIcons = document.querySelectorAll(".random-city-weather-icon");
-    const weatherTemps = document.querySelectorAll(
-      ".random-city-weather-temperature"
-    );
-    const weatherInfos = document.querySelectorAll(".random-city-weather-info");
+    const weatherIcons = document.querySelectorAll(".world-city-icon");
+    const weatherTemps = document.querySelectorAll(".world-city-temperature");
+    const weatherInfos = document.querySelectorAll(".world-city-info");
     weatherIcons.forEach((icon) => {
       renderSunnyIcon(icon);
     });
@@ -1419,7 +1489,10 @@ const renderUI = (function () {
     weatherTemps.forEach((temp) => {
       const p = document.createElement("p");
       p.textContent = "10°";
+      const unit = document.createElement("p");
+      unit.textContent = "C";
       temp.appendChild(p);
+      temp.appendChild(unit);
     });
 
     weatherInfos.forEach((info) => {
@@ -1429,6 +1502,7 @@ const renderUI = (function () {
     });
   }
   return {
+    hideCurrentWeatherInfo,
     renderHourlyWeather,
     previousHour,
     nextHour,
@@ -1440,6 +1514,10 @@ const renderUI = (function () {
     renderWeeklyWeatherInfo,
     renderSunnyIcon,
     renderWorldWeatherInfo,
+    renderCurrentWeatherInfo,
+    hideWorldWeatherInfo,
+    renderPrecipitationIcon,
+    renderPrecipitationInfo,
   };
 })();
 
