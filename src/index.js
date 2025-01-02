@@ -1,6 +1,6 @@
 import "./styles.css";
 import { eventHandler } from "./eventListeners.js";
-import { renderUI } from "./UI.js";
+import { renderSearchUI, renderWorldUI } from "./UI.js";
 import { weather } from "./weather.js";
 
 const settings = document.querySelector("aside");
@@ -13,24 +13,25 @@ eventHandler.addMenuBtnListeners();
 eventHandler.addSettingsListeners();
 eventHandler.addSearchListeners();
 
-// const hours = document.querySelectorAll(".hours > div");
+const hours = document.querySelectorAll(".hours > div");
 
-// hours[0].classList.add("first-hour");
-// hours[7].classList.add("last-hour");
+hours[0].classList.add("first-hour");
+hours[7].classList.add("last-hour");
 
-// for (let i = 0; i < 8; i++) {
-//   hours[i].setAttribute("id", "active-hour");
-// }
+for (let i = 0; i < 8; i++) {
+  hours[i].setAttribute("id", "active-hour");
+}
 
-// renderUI.renderHourlyWeather();
+renderSearchUI.renderHourlyWeather();
 eventHandler.addArrowListeners();
-// renderUI.renderWeeklyWeather();
-// renderUI.renderCurrentWeather();
-renderUI.renderWeeklyWeatherInfo();
-// renderUI.renderPrecipitationInfo();
+renderSearchUI.renderWeeklyWeather();
+renderSearchUI.renderCurrentWeather();
+renderSearchUI.renderWeeklyWeatherInfo();
+renderSearchUI.renderPrecipitationIcons();
 
-renderUI.hideCurrentWeatherInfo();
-// renderUI.hideWorldWeatherInfo();
-weather.fetchWorldData().then(() => {
-  renderUI.renderWorldWeather();
-});
+// renderSearchUI.hideCurrentWeatherInfo();
+renderWorldUI.hideWorldWeatherInfo();
+
+// weather.fetchWorldData().then(() => {
+//   renderWorldUI.renderWorldWeather();
+// });
