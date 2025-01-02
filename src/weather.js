@@ -93,11 +93,32 @@ const weather = (function () {
       console.log(error.message);
     }
   }
+  async function fetchWorldCityConditions() {
+    try {
+      const fetchRequests = worldData.map((city) => {
+        try {
+          const tempConditions = city.currentConditions.icon;
+          console.log(tempConditions);
+          return tempConditions;
+        } catch (error) {
+          console.log(
+            `Error fetching temperature conditions for ${city}`,
+            error.message
+          );
+        }
+      });
+      const fetchResults = await Promise.all(fetchRequests);
+      return fetchResults;
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
   return {
     fetchSearchData,
     fetchWorldData,
     fetchWorldCityNames,
     fetchWorldCityTemperatures,
+    fetchWorldCityConditions,
   };
 })();
 
