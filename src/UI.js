@@ -96,6 +96,18 @@ const renderSearchUI = (function () {
   const hours = document.querySelectorAll(".hours > div");
   const hourWeatherIcons = document.querySelectorAll(".hour-weather-icon");
   const currentWeatherIcon = document.querySelector(".weather-icon");
+  const currentWeatherTempFigure = document.querySelector(
+    ".temperature-icon > .temperature-figure"
+  );
+  const currentWeatherInfo = document.querySelector(
+    ".current-weather-description > p"
+  );
+  const currentWindSpeed = document.querySelector(".current-wind-speed");
+  const currentUVIndex = document.querySelector(".current-uv-index");
+  const currentHumidity = document.querySelector(".current-humidity");
+  const currentFeelsLikeTemp = document.querySelector(
+    ".current-feels-like-temperature"
+  );
   const weeklyWeatherInfos = document.querySelectorAll(
     ".weekly-weather-description"
   );
@@ -167,8 +179,64 @@ const renderSearchUI = (function () {
     }
   }
 
-  function renderCurrentWeather() {
-    renderPartlyCloudyDayIcon(currentWeatherIcon);
+  async function renderCurrentWeather() {
+    // Data needed:
+    // Temp
+    // Icon:
+    // Wind Speed:
+    // UV Index:
+    // Humidity:
+    // Feels Like Temp:
+    currentWeatherTempFigure.textContent = await weather.fetchTemperature();
+    currentWindSpeed.textContent = await weather.fetchWindSpeed();
+    currentUVIndex.textContent = await weather.fetchUVIndex();
+    currentHumidity.textContent = await weather.fetchHumidity();
+    const currentWeatherConditions = await weather.fetchConditions();
+    currentWeatherIcon.innerHTML = "";
+    try {
+      currentFeelsLikeTemp.textContent =
+        await weather.fetchFeelsLikeTemperature();
+    } catch (error) {
+      console.log(error.message);
+    }
+    switch (currentWeatherConditions) {
+      case "clear-day":
+        currentWeatherIcon.appendChild(icons.getClearDayIcon());
+        currentWeatherInfo.textContent = "Sunny";
+        break;
+      case "clear-night":
+        currentWeatherIcon.appendChild(icons.getClearNightIcon());
+        currentWeatherInfo.textContent = "Clear";
+        break;
+      case "partly-cloudy-day":
+        currentWeatherIcon.appendChild(icons.getPartlyCloudyDayIcon());
+        currentWeatherInfo.textContent = "Partly Cloudy";
+        break;
+      case "partly-cloudy-night":
+        currentWeatherIcon.appendChild(icons.getPartlyCloudyNightIcon());
+        currentWeatherInfo.textContent = "Partly Cloudy";
+        break;
+      case "cloudy":
+        currentWeatherIcon.appendChild(icons.getCloudyIcon());
+        currentWeatherInfo.textContent = "Cloudy";
+        break;
+      case "fog":
+        currentWeatherIcon.appendChild(icons.getFogIcon());
+        currentWeatherInfo.textContent = "Foggy";
+        break;
+      case "wind":
+        currentWeatherIcon.appendChild(icons.getWindIcon());
+        currentWeatherInfo.textContent = "Windy";
+        break;
+      case "rain":
+        currentWeatherIcon.appendChild(icons.getRainIcon());
+        currentWeatherInfo.textContent = "Rainy";
+        break;
+      case "snow":
+        currentWeatherIcon.appendChild(icons.getSnowIcon());
+        currentWeatherInfo.textContent = "Snowy";
+        break;
+    }
   }
 
   function renderHourlyWeather() {
