@@ -22,12 +22,12 @@ eventHandler.addSearchListeners();
 //   hours[i].setAttribute("id", "active-hour");
 // }
 
-renderUI.renderHourlyWeather();
+// renderUI.renderHourlyWeather();
 eventHandler.addArrowListeners();
-renderUI.renderWeeklyWeather();
-renderUI.renderCurrentWeather();
+// renderUI.renderWeeklyWeather();
+// renderUI.renderCurrentWeather();
 renderUI.renderWeeklyWeatherInfo();
-renderUI.renderPrecipitationInfo();
+// renderUI.renderPrecipitationInfo();
 
 renderUI.hideCurrentWeatherInfo();
 // renderUI.hideWorldWeatherInfo();
