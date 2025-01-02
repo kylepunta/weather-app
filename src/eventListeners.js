@@ -47,6 +47,7 @@ const eventHandler = (function () {
       const searchResult = await weather.fetchSearchData();
       if (searchResult) {
         renderSearchUI.renderCity(searchResult.address);
+        renderSearchUI.renderCurrentWeather();
       }
     });
   }
