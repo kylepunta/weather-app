@@ -1,4 +1,4 @@
-import { renderUI } from "./UI.js";
+import { renderSearchUI } from "./UI.js";
 import { weather } from "./weather.js";
 
 const eventHandler = (function () {
@@ -43,14 +43,19 @@ const eventHandler = (function () {
       searchBtn.removeAttribute("id", "active-button");
     });
 
-    searchBtn.addEventListener("click", () => {});
+    searchBtn.addEventListener("click", async () => {
+      const searchResult = await weather.fetchSearchData();
+      if (searchResult) {
+        renderSearchUI.renderCity(searchResult.address);
+      }
+    });
   }
   function addArrowListeners() {
     leftArrow.addEventListener("click", () => {
-      renderUI.previousHour();
+      renderSearchUI.previousHour();
     });
     rightArrow.addEventListener("click", () => {
-      renderUI.nextHour();
+      renderSearchUI.nextHour();
     });
   }
   return {
