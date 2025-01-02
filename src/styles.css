@@ -326,8 +326,11 @@ section:nth-child(4) {
 
 .temperature-figure {
   margin: 0;
-  font-size: 60px;
-  padding-top: 16px;
+  font-size: 3.4rem;
+  padding-top: 26px;
+  position: relative;
+  right: 6px;
+  top: 2px;
 }
 
 .unit {
@@ -335,7 +338,8 @@ section:nth-child(4) {
   text-align: end;
   position: relative;
   bottom: 32px;
-  right: 8px;
+  left: 8px;
+  font-size: 1.2rem;
   color: #666;
 }
 
@@ -382,6 +386,7 @@ p {
 #wind-unit {
   font-size: 0.6rem;
   padding-left: 4px;
+  color: #666;
 }
 
 .current-weather-details > div > *:first-child {
@@ -879,4 +884,17 @@ footer {
 .weekly-weather-header p {
   font-size: 1.1rem;
   padding-right: 12px;
+}
+
+.feels-like-temp-unit {
+  position: relative;
+  font-size: 0.7rem;
+  top: 10px;
+  left: 2px;
+  color: #666;
+}
+
+.humidity-unit {
+  color: #666;
+  font-size: 0.7rem;
 }
