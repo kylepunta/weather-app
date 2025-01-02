@@ -8,26 +8,45 @@ const weather = (function () {
     "Los Angeles",
   ];
   const worldData = [];
+  let searchResult = {};
+
   async function fetchSearchData() {
     const search = document.querySelector("#location").value;
     const city = search.toLowerCase();
     console.log(city);
 
     try {
-      let response = await fetch(
-        `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=metric&key=2R7G4LV5HPBTDPEQYAMRW4K2U&contentType=json`,
+      const response = await fetch(
+        `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=metric&key=KW6XVPFVXWM4QCFPHLTREZMX2&contentType=json`,
         { mode: "cors" }
       );
 
       if (!response.ok) {
         throw new Error(`Response Status: ${response.status}`);
       }
-      response = await response.json();
-      console.log(response);
-      return response;
+      const data = await response.json();
+      console.log(data);
+      searchResult = data;
+      console.log(searchResult);
+      return data;
     } catch (error) {
       console.log(error.message);
     }
+  }
+  async function fetchCityName() {
+    const cityName = await searchResult.address;
+    const capitalizedName = cityName
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+    return capitalizedName;
+  }
+  async function fetchCountryName() {
+    const cityAddress = await searchResult.resolvedAddress.split(",");
+    console.log(cityAddress);
+    const countryName = cityAddress.pop();
+    console.log(countryName);
+    return countryName;
   }
   async function fetchWorldData() {
     try {
@@ -119,6 +138,8 @@ const weather = (function () {
     fetchWorldCityNames,
     fetchWorldCityTemperatures,
     fetchWorldCityConditions,
+    fetchCityName,
+    fetchCountryName,
   };
 })();
 
