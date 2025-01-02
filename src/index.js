@@ -24,7 +24,6 @@ for (let i = 0; i < 8; i++) {
 renderSearchUI.renderHourlyWeather();
 eventHandler.addArrowListeners();
 renderSearchUI.renderWeeklyWeather();
-renderSearchUI.renderCurrentWeather();
 renderSearchUI.renderWeeklyWeatherInfo();
 renderSearchUI.renderPrecipitationIcons();
 
