@@ -48,6 +48,34 @@ const weather = (function () {
     console.log(countryName);
     return countryName;
   }
+
+  async function fetchTemperature() {
+    const temperature = await searchResult.currentConditions.temp;
+    return Math.round(temperature);
+  }
+  async function fetchConditions() {
+    const conditions = await searchResult.currentConditions.icon;
+    return conditions;
+  }
+  async function fetchWindSpeed() {
+    const windSpeed = await searchResult.currentConditions.windspeed;
+    return Math.round(windSpeed);
+  }
+  async function fetchUVIndex() {
+    const UVIndex = await searchResult.currentConditions.uvindex;
+    return UVIndex;
+  }
+  async function fetchHumidity() {
+    const humidity = await searchResult.currentConditions.humidity;
+    return Math.round(humidity);
+  }
+  async function fetchFeelsLikeTemperature() {
+    const feelsLikeTemperature = await searchResult.currentConditions.feelslike;
+    console.log(Math.round(feelsLikeTemperature));
+    console.log(typeof Math.round(feelsLikeTemperature));
+    return Math.round(feelsLikeTemperature);
+  }
+
   async function fetchWorldData() {
     try {
       const fetchRequests = worldCities.map(async (city) => {
@@ -140,6 +168,12 @@ const weather = (function () {
     fetchWorldCityConditions,
     fetchCityName,
     fetchCountryName,
+    fetchTemperature,
+    fetchConditions,
+    fetchWindSpeed,
+    fetchUVIndex,
+    fetchHumidity,
+    fetchFeelsLikeTemperature,
   };
 })();
 
