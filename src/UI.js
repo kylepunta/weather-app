@@ -2,7 +2,6 @@ import { icons } from "./icons.js";
 import { weather } from "./weather.js";
 
 const renderWorldUI = (function () {
-  const parser = new DOMParser();
   function hideWorldWeatherInfo() {
     const section = document.querySelector("section:last-of-type");
     section.setAttribute("id", "hidden");

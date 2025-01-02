@@ -1,7 +1,6 @@
 import "./styles.css";
 import { eventHandler } from "./eventListeners.js";
 import { renderSearchUI, renderWorldUI } from "./UI.js";
-import { weather } from "./weather.js";
 
 const settings = document.querySelector("aside");
 const tickBoxes = document.querySelectorAll("#tick-box");
