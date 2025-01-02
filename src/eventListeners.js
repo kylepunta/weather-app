@@ -43,10 +43,7 @@ const eventHandler = (function () {
       searchBtn.removeAttribute("id", "active-button");
     });
 
-    searchBtn.addEventListener("click", () => {
-      const search = document.querySelector("#location").value;
-      weather.fetchData(search);
-    });
+    searchBtn.addEventListener("click", () => {});
   }
   function addArrowListeners() {
     leftArrow.addEventListener("click", () => {

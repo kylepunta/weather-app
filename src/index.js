@@ -1,6 +1,7 @@
 import "./styles.css";
 import { eventHandler } from "./eventListeners.js";
 import { renderUI } from "./UI.js";
+import { weather } from "./weather.js";
 
 const settings = document.querySelector("aside");
 const tickBoxes = document.querySelectorAll("#tick-box");
@@ -21,22 +22,15 @@ eventHandler.addSearchListeners();
 //   hours[i].setAttribute("id", "active-hour");
 // }
 
-const hourTemperatureContainers =
-  document.querySelectorAll(".hour-temperature");
-
-hourTemperatureContainers.forEach((container) => {
-  const temp = document.createElement("p");
-  temp.textContent = "4°";
-  container.appendChild(temp);
-});
-
 renderUI.renderHourlyWeather();
 eventHandler.addArrowListeners();
 renderUI.renderWeeklyWeather();
 renderUI.renderCurrentWeather();
 renderUI.renderWeeklyWeatherInfo();
 renderUI.renderPrecipitationInfo();
-renderUI.renderWorldWeather();
 
 renderUI.hideCurrentWeatherInfo();
 // renderUI.hideWorldWeatherInfo();
+weather.fetchWorldData().then(() => {
+  renderUI.renderWorldWeather();
+});

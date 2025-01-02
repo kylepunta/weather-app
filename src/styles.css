@@ -711,11 +711,11 @@ section:nth-child(4) {
 }
 
 .world-city-temperature > p:last-child {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   color: #444;
   position: relative;
-  top: 15px;
-  right: 16px;
+  top: 12px;
+  left: 4px;
 }
 
 .world-weather-header > h4 {
