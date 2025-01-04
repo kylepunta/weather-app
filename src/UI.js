@@ -1,4 +1,4 @@
-import { icons } from "./icons.js";
+import { icons as weatherIconsModule } from "./icons.js";
 import { weather } from "./weather.js";
 
 const loadingState = (function () {
@@ -55,39 +55,43 @@ const renderWorldUI = (function () {
     for (let i = 0; i < currentWeatherConditions.length; i++) {
       switch (currentWeatherConditions[i]) {
         case "clear-day":
-          weatherIcons[i].appendChild(icons.getClearDayIcon());
+          weatherIcons[i].appendChild(weatherIconsModule.getClearDayIcon());
           weatherDescriptions[i].textContent = "Sunny";
           break;
         case "clear-night":
-          weatherIcons[i].appendChild(icons.getClearNightIcon());
+          weatherIcons[i].appendChild(weatherIconsModule.getClearNightIcon());
           weatherDescriptions[i].textContent = "Clear";
           break;
         case "partly-cloudy-day":
-          weatherIcons[i].appendChild(icons.getPartlyCloudyDayIcon());
+          weatherIcons[i].appendChild(
+            weatherIconsModule.getPartlyCloudyDayIcon()
+          );
           weatherDescriptions[i].textContent = "Partly Cloudy";
           break;
         case "partly-cloudy-night":
-          weatherIcons[i].appendChild(icons.getPartlyCloudyNightIcon());
+          weatherIcons[i].appendChild(
+            weatherIconsModule.getPartlyCloudyNightIcon()
+          );
           weatherDescriptions[i].textContent = "Partly Cloudy";
           break;
         case "cloudy":
-          weatherIcons[i].appendChild(icons.getCloudyIcon());
+          weatherIcons[i].appendChild(weatherIconsModule.getCloudyIcon());
           weatherDescriptions[i].textContent = "Cloudy";
           break;
         case "fog":
-          weatherIcons[i].appendChild(icons.getFogIcon());
+          weatherIcons[i].appendChild(weatherIconsModule.getFogIcon());
           weatherDescriptions[i].textContent = "Foggy";
           break;
         case "wind":
-          weatherIcons[i].appendChild(icons.getWindIcon());
+          weatherIcons[i].appendChild(weatherIconsModule.getWindIcon());
           weatherDescriptions[i].textContent = "Windy";
           break;
         case "rain":
-          weatherIcons[i].appendChild(icons.getRainIcon());
+          weatherIcons[i].appendChild(weatherIconsModule.getRainIcon());
           weatherDescriptions[i].textContent = "Rainy";
           break;
         case "snow":
-          weatherIcons[i].appendChild(icons.getSnowIcon());
+          weatherIcons[i].appendChild(weatherIconsModule.getSnowIcon());
           weatherDescriptions[i].textContent = "Snowy";
           break;
       }
@@ -103,6 +107,8 @@ const renderWorldUI = (function () {
 const renderSearchUI = (function () {
   const parser = new DOMParser();
 
+  const cityNameDisplay = document.querySelector(".city-name > p");
+  const countryNameDisplay = document.querySelector(".country-name > p");
   const hours = document.querySelectorAll(".hours > div");
   const hourWeatherIcons = document.querySelectorAll(".hour-weather-icon");
   const hourTemperatures = document.querySelectorAll(".hour-temperature");
@@ -129,6 +135,75 @@ const renderSearchUI = (function () {
   function clearResults() {
     console.log(hourWeatherIcons);
     console.log(hourTemperatures);
+  }
+  async function renderCityAndCountryName() {
+    const { cityName, countryName } = weather.fetchCityAndCountryName();
+    cityNameDisplay.textContent = cityName;
+
+    countryNameDisplay.textContent = countryName;
+  }
+  async function renderCurrentWeather() {
+    // Data needed:
+    // Temp
+    // Icon:
+    // Wind Speed:
+    // UV Index:
+    // Humidity:
+    // Feels Like Temp:
+    const { temp, icon, windSpeed, UVIndex, humidity, feelsLikeTemp } =
+      weather.fetchCurrentData();
+    currentWeatherTempFigure.textContent = temp;
+    currentWeatherIcon.innerHTML = "";
+    currentWindSpeed.textContent = windSpeed;
+    currentUVIndex.textContent = UVIndex;
+    currentHumidity.textContent = humidity;
+    currentFeelsLikeTemp.textContent = feelsLikeTemp;
+    switch (icon) {
+      case "clear-day":
+        currentWeatherIcon.appendChild(weatherIconsModule.getClearDayIcon());
+        currentWeatherInfo.textContent = "Sunny";
+        break;
+      case "clear-night":
+        currentWeatherIcon.appendChild(weatherIconsModule.getClearNightIcon());
+        currentWeatherInfo.textContent = "Clear";
+        break;
+      case "partly-cloudy-day":
+        currentWeatherIcon.appendChild(
+          weatherIconsModule.getPartlyCloudyDayIcon()
+        );
+        currentWeatherInfo.textContent = "Partly Cloudy";
+        break;
+      case "partly-cloudy-night":
+        currentWeatherIcon.appendChild(
+          weatherIconsModule.getPartlyCloudyNightIcon()
+        );
+        currentWeatherInfo.textContent = "Partly Cloudy";
+        break;
+      case "cloudy":
+        currentWeatherIcon.appendChild(weatherIconsModule.getCloudyIcon());
+        currentWeatherInfo.textContent = "Cloudy";
+        break;
+      case "fog":
+        currentWeatherIcon.appendChild(weatherIconsModule.getFogIcon());
+        currentWeatherInfo.textContent = "Foggy";
+        break;
+      case "wind":
+        currentWeatherIcon.appendChild(weatherIconsModule.getWindIcon());
+        currentWeatherInfo.textContent = "Windy";
+        break;
+      case "rain":
+        currentWeatherIcon.appendChild(weatherIconsModule.getRainIcon());
+        currentWeatherInfo.textContent = "Rainy";
+        break;
+      case "snow":
+        currentWeatherIcon.appendChild(weatherIconsModule.getSnowIcon());
+        currentWeatherInfo.textContent = "Snowy";
+        break;
+    }
+  }
+  async function renderHourlyWeather() {
+    const { temps, icons } = weather.fetchHoursData();
+
     hourWeatherIcons.forEach((icon) => {
       console.log("clearing");
       icon.innerHTML = "";
@@ -137,14 +212,95 @@ const renderSearchUI = (function () {
       console.log("clearing");
       temp.innerHTML = "";
     });
+
+    hourTemperatures.forEach((hour, index) => {
+      const temperature = document.createElement("p");
+      temperature.textContent = temps[index];
+      const unit = document.createElement("p");
+      unit.textContent = "C";
+      unit.setAttribute("id", "hour-temp-unit");
+      hour.appendChild(temperature);
+      hour.appendChild(unit);
+    });
+
+    for (let i = 0; i < hourWeatherIcons.length; i++) {
+      switch (icons[i]) {
+        case "clear-day":
+          hourWeatherIcons[i].appendChild(weatherIconsModule.getClearDayIcon());
+          break;
+        case "clear-night":
+          hourWeatherIcons[i].appendChild(
+            weatherIconsModule.getClearNightIcon()
+          );
+          break;
+        case "partly-cloudy-day":
+          hourWeatherIcons[i].appendChild(
+            weatherIconsModule.getPartlyCloudyDayIcon()
+          );
+          break;
+        case "partly-cloudy-night":
+          hourWeatherIcons[i].appendChild(
+            weatherIconsModule.getPartlyCloudyNightIcon()
+          );
+          break;
+        case "cloudy":
+          hourWeatherIcons[i].appendChild(weatherIconsModule.getCloudyIcon());
+          break;
+        case "fog":
+          hourWeatherIcons[i].appendChild(weatherIconsModule.getFogIcon());
+          break;
+        case "wind":
+          hourWeatherIcons[i].appendChild(weatherIconsModule.getWindIcon());
+          break;
+        case "rain":
+          hourWeatherIcons[i].appendChild(weatherIconsModule.getRainIcon());
+          break;
+        case "snow":
+          hourWeatherIcons[i].appendChild(weatherIconsModule.getSnowIcon());
+          break;
+      }
+    }
+
+    // setInterval(() => {
+    //   hours.forEach((hour) => {
+    //     hour.removeAttribute("id", "active-hour");
+    //   });
+
+    //   if (start === 16) {
+    //     start = 0;
+    //     end = 7;
+    //   } else {
+    //     start++;
+    //     end++;
+    //   }
+    //   if (end === 23) {
+    //     end = 7;
+    //     start = 0;
+    //   } else {
+    //     end--;
+    //     start--;
+    //   }
+
+    //   for (let i = start; i <= end; i++) {
+    //     hours[i].setAttribute("id", "active-hour");
+    //   }
+    // }, 2000);
   }
-
-  async function renderCity() {
-    const cityName = document.querySelector(".city-name > p");
-    cityName.textContent = await weather.fetchCityName();
-
-    const countryName = document.querySelector(".country-name > p");
-    countryName.textContent = await weather.fetchCountryName();
+  function renderWeeklyWeather() {
+    const weeklyWeatherTemperatures = document.querySelectorAll(
+      ".weekly-temperature"
+    );
+    const weeklyWeatherIcons = document.querySelectorAll(
+      ".weekly-weather-icon"
+    );
+    weeklyWeatherTemperatures.forEach((dayTemperature) => {
+      const temp = document.createElement("p");
+      temp.textContent = "10°";
+      dayTemperature.appendChild(temp);
+    });
+    weeklyWeatherIcons.forEach((icon) => {
+      renderRainIcon(icon);
+    });
   }
 
   function renderPrecipitationIcons() {
@@ -203,137 +359,6 @@ const renderSearchUI = (function () {
     }
   }
 
-  async function renderCurrentWeather() {
-    // Data needed:
-    // Temp
-    // Icon:
-    // Wind Speed:
-    // UV Index:
-    // Humidity:
-    // Feels Like Temp:
-    currentWeatherTempFigure.textContent = await weather.fetchTemperature();
-    currentWindSpeed.textContent = await weather.fetchWindSpeed();
-    currentUVIndex.textContent = await weather.fetchUVIndex();
-    currentHumidity.textContent = await weather.fetchHumidity();
-    const currentWeatherConditions = await weather.fetchConditions();
-    currentWeatherIcon.innerHTML = "";
-    try {
-      currentFeelsLikeTemp.textContent =
-        await weather.fetchFeelsLikeTemperature();
-    } catch (error) {
-      console.log(error.message);
-    }
-    switch (currentWeatherConditions) {
-      case "clear-day":
-        currentWeatherIcon.appendChild(icons.getClearDayIcon());
-        currentWeatherInfo.textContent = "Sunny";
-        break;
-      case "clear-night":
-        currentWeatherIcon.appendChild(icons.getClearNightIcon());
-        currentWeatherInfo.textContent = "Clear";
-        break;
-      case "partly-cloudy-day":
-        currentWeatherIcon.appendChild(icons.getPartlyCloudyDayIcon());
-        currentWeatherInfo.textContent = "Partly Cloudy";
-        break;
-      case "partly-cloudy-night":
-        currentWeatherIcon.appendChild(icons.getPartlyCloudyNightIcon());
-        currentWeatherInfo.textContent = "Partly Cloudy";
-        break;
-      case "cloudy":
-        currentWeatherIcon.appendChild(icons.getCloudyIcon());
-        currentWeatherInfo.textContent = "Cloudy";
-        break;
-      case "fog":
-        currentWeatherIcon.appendChild(icons.getFogIcon());
-        currentWeatherInfo.textContent = "Foggy";
-        break;
-      case "wind":
-        currentWeatherIcon.appendChild(icons.getWindIcon());
-        currentWeatherInfo.textContent = "Windy";
-        break;
-      case "rain":
-        currentWeatherIcon.appendChild(icons.getRainIcon());
-        currentWeatherInfo.textContent = "Rainy";
-        break;
-      case "snow":
-        currentWeatherIcon.appendChild(icons.getSnowIcon());
-        currentWeatherInfo.textContent = "Snowy";
-        break;
-    }
-  }
-
-  async function renderHourlyWeather() {
-    const hourlyTemperatures = await weather.fetchHourlyTemperatures();
-    const hourlyConditions = await weather.fetchHourlyConditions();
-
-    hourTemperatures.forEach((hour, index) => {
-      const temperature = document.createElement("p");
-      temperature.textContent = hourlyTemperatures[index];
-      const unit = document.createElement("p");
-      unit.textContent = "C";
-      unit.setAttribute("id", "hour-temp-unit");
-      hour.appendChild(temperature);
-      hour.appendChild(unit);
-    });
-
-    for (let i = 0; i < hourWeatherIcons.length; i++) {
-      switch (hourlyConditions[i]) {
-        case "clear-day":
-          hourWeatherIcons[i].appendChild(icons.getClearDayIcon());
-          break;
-        case "clear-night":
-          hourWeatherIcons[i].appendChild(icons.getClearNightIcon());
-          break;
-        case "partly-cloudy-day":
-          hourWeatherIcons[i].appendChild(icons.getPartlyCloudyDayIcon());
-          break;
-        case "partly-cloudy-night":
-          hourWeatherIcons[i].appendChild(icons.getPartlyCloudyNightIcon());
-          break;
-        case "cloudy":
-          hourWeatherIcons[i].appendChild(icons.getCloudyIcon());
-          break;
-        case "fog":
-          hourWeatherIcons[i].appendChild(icons.getFogIcon());
-          break;
-        case "wind":
-          hourWeatherIcons[i].appendChild(icons.getWindIcon());
-          break;
-        case "rain":
-          hourWeatherIcons[i].appendChild(icons.getRainIcon());
-          break;
-        case "snow":
-          hourWeatherIcons[i].appendChild(icons.getSnowIcon());
-          break;
-      }
-    }
-
-    // setInterval(() => {
-    //   hours.forEach((hour) => {
-    //     hour.removeAttribute("id", "active-hour");
-    //   });
-
-    //   if (start === 16) {
-    //     start = 0;
-    //     end = 7;
-    //   } else {
-    //     start++;
-    //     end++;
-    //   }
-    //   if (end === 23) {
-    //     end = 7;
-    //     start = 0;
-    //   } else {
-    //     end--;
-    //     start--;
-    //   }
-
-    //   for (let i = start; i <= end; i++) {
-    //     hours[i].setAttribute("id", "active-hour");
-    //   }
-    // }, 2000);
-  }
   function previousHour() {
     hours.forEach((hour) => {
       hour.removeAttribute("id", "active-hour");
@@ -364,22 +389,6 @@ const renderSearchUI = (function () {
       hours[i].setAttribute("id", "active-hour");
     }
   }
-  function renderWeeklyWeather() {
-    const weeklyWeatherTemperatures = document.querySelectorAll(
-      ".weekly-temperature"
-    );
-    const weeklyWeatherIcons = document.querySelectorAll(
-      ".weekly-weather-icon"
-    );
-    weeklyWeatherTemperatures.forEach((dayTemperature) => {
-      const temp = document.createElement("p");
-      temp.textContent = "10°";
-      dayTemperature.appendChild(temp);
-    });
-    weeklyWeatherIcons.forEach((icon) => {
-      renderRainIcon(icon);
-    });
-  }
 
   function renderRainIcon(container) {
     container.appendChild(icons.getRainIcon());
@@ -402,7 +411,7 @@ const renderSearchUI = (function () {
   }
 
   return {
-    renderCity,
+    renderCityAndCountryName,
     renderWeeklyWeatherInfo,
     renderSunnyIcon,
     renderCloudyIcon,
