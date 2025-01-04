@@ -8,9 +8,19 @@ const weather = (function () {
     "Los Angeles",
   ];
   const worldData = [];
+  let hoursData = [];
+  let weekData = [];
+
   let searchResult = {};
+  let isLoading = false;
 
   async function fetchSearchData() {
+    if (isLoading) {
+      console.log("Still loading");
+      return;
+    }
+    isLoading = true;
+
     const search = document.querySelector("#location").value;
     const city = search.toLowerCase();
     console.log(city);
@@ -31,6 +41,11 @@ const weather = (function () {
       return data;
     } catch (error) {
       console.log(error.message);
+    } finally {
+      setTimeout(() => {
+        isLoading = false;
+        console.log("Finished loading");
+      }, 100);
     }
   }
   async function fetchCityName() {
@@ -75,6 +90,62 @@ const weather = (function () {
     console.log(typeof Math.round(feelsLikeTemperature));
     return Math.round(feelsLikeTemperature);
   }
+
+  async function fetchHoursData() {
+    hoursData = [];
+    const fetchRequests = [];
+    for (let i = 0; i < 24; i++) {
+      const fetchRequest = await searchResult.days[0].hours[i];
+      console.log(fetchRequest);
+      fetchRequests.push(fetchRequest);
+    }
+    const fetchResults = await Promise.all(fetchRequests);
+    console.log(fetchResults);
+    fetchResults.forEach((data) => {
+      if (data) {
+        console.log("pushed!");
+        hoursData.push(data);
+      }
+    });
+  }
+
+  async function fetchHourlyTemperatures() {
+    const fetchRequests = hoursData.map(async (hour) => {
+      return Math.round(hour.temp);
+    });
+    const fetchResults = await Promise.all(fetchRequests);
+    console.log(fetchResults);
+    return fetchResults;
+  }
+  async function fetchHourlyConditions() {
+    const fetchRequests = await Promise.all(
+      hoursData.map(async (hour) => {
+        return hour.icon;
+      })
+    );
+    console.log(fetchRequests);
+    return fetchRequests;
+  }
+
+  async function fetchWeekData() {
+    weekData = [];
+    const fetchRequests = [];
+    for (let i = 0; i < 7; i++) {
+      const fetchRequest = await searchResult.days[i];
+      console.log(fetchRequest);
+      fetchRequests.push(fetchRequest);
+    }
+    const fetchResults = await Promise.all(fetchRequests);
+    fetchResults.forEach((data) => {
+      if (data) {
+        weekData.push(data);
+      }
+    });
+    console.log(weekData);
+  }
+  async function fetchWeekDay() {}
+  async function fetchWeekConditions() {}
+  async function fetchWeekTemperatures() {}
 
   async function fetchWorldData() {
     try {
@@ -174,6 +245,10 @@ const weather = (function () {
     fetchUVIndex,
     fetchHumidity,
     fetchFeelsLikeTemperature,
+    fetchHoursData,
+    fetchHourlyTemperatures,
+    fetchHourlyConditions,
+    fetchWeekData,
   };
 })();
 
