@@ -1,6 +1,16 @@
 import { icons } from "./icons.js";
 import { weather } from "./weather.js";
 
+const loadingState = (function () {
+  let state = {
+    isLoading: false,
+  };
+  return {
+    getLoadingState: () => state,
+    setLoadingState: (status) => (state = { isLoading: status }),
+  };
+})();
+
 const renderWorldUI = (function () {
   function hideWorldWeatherInfo() {
     const section = document.querySelector("section:last-of-type");
@@ -410,4 +420,4 @@ const renderSearchUI = (function () {
   };
 })();
 
-export { renderWorldUI, renderSearchUI };
+export { loadingState, renderWorldUI, renderSearchUI };

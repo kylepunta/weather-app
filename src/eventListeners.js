@@ -1,5 +1,5 @@
 import { renderSearchUI } from "./UI.js";
-import { weather } from "./weather.js";
+import { weatherState, weather } from "./weather.js";
 
 const eventHandler = (function () {
   const menuBtn = document.querySelector(".menu-button");
@@ -43,18 +43,7 @@ const eventHandler = (function () {
       searchBtn.removeAttribute("id", "active-button");
     });
 
-    searchBtn.addEventListener("click", async () => {
-      const searchResult = await weather.fetchSearchData();
-      if (searchResult) {
-        renderSearchUI.clearResults();
-        renderSearchUI.renderCity(searchResult.address);
-        renderSearchUI.renderCurrentWeather();
-        weather.fetchHoursData().then(() => {
-          renderSearchUI.renderHourlyWeather();
-        });
-        weather.fetchWeekData();
-      }
-    });
+    searchBtn.addEventListener("click", weather.handleSearch);
   }
   function addArrowListeners() {
     leftArrow.addEventListener("click", () => {

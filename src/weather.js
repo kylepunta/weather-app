@@ -1,53 +1,120 @@
+import { loadingState, renderSearchUI } from "./UI.js";
+
+const weatherState = (function () {
+  let state = {
+    worldCities: [
+      "New York",
+      "London",
+      "Sydney",
+      "Tokyo",
+      "Berlin",
+      "Los Angeles",
+    ],
+    searchResult: null,
+    worldData: [],
+    weekData: [],
+    hoursData: [],
+    currentCity: null,
+  };
+  return {
+    getState: () => state,
+    resetState: () =>
+      (state = {
+        searchResult: [],
+        worldData: [],
+        weekData: [],
+        hoursData: [],
+        currentCity: null,
+      }),
+    setSearchResult: (data) => (state.searchResult = data),
+    getSearchResult: () => state.searchResult,
+    addWorldData: (data) => state.worldData.push(data),
+    addWeekData: (data) => state.weekData.push(data),
+    addHoursData: (data) => state.hoursData.push(data),
+    getWorldData: () => state.worldData,
+    fetchWeekData: () => state.weekData,
+    fetchHoursData: () => state.hoursData,
+    getCurrentCity: () => state.currentCity,
+    setCurrentCity: () => {
+      const search = document.querySelector("#location").value;
+      const city = search.toLowerCase();
+      state.currentCity = city;
+      console.log(city);
+    },
+  };
+})();
+
 const weather = (function () {
-  const worldCities = [
-    "New York",
-    "London",
-    "Sydney",
-    "Tokyo",
-    "Berlin",
-    "Los Angeles",
-  ];
-  const worldData = [];
-  let hoursData = [];
-  let weekData = [];
-
-  let searchResult = {};
-  let isLoading = false;
-
-  async function fetchSearchData() {
-    if (isLoading) {
-      console.log("Still loading");
-      return;
+  const API_Key = "KW6XVPFVXWM4QCFPHLTREZMX2";
+  // Handle search function
+  async function handleSearch() {
+    weatherState.resetState();
+    weatherState.setCurrentCity();
+    try {
+      const searchResult = await fetchSearchResult();
+      weatherState.setSearchResult(searchResult);
+      fetchWeekData();
+      fetchHoursData();
+    } catch (error) {
+      console.log(`Error handling search`, error.message);
     }
-    isLoading = true;
-
-    const search = document.querySelector("#location").value;
-    const city = search.toLowerCase();
-    console.log(city);
-
+  }
+  // fetching general weather data
+  async function fetchWeatherData(city) {
     try {
       const response = await fetch(
-        `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=metric&key=KW6XVPFVXWM4QCFPHLTREZMX2&contentType=json`,
+        `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=metric&key=${API_Key}&contentType=json`,
         { mode: "cors" }
       );
-
       if (!response.ok) {
         throw new Error(`Response Status: ${response.status}`);
       }
-      const data = await response.json();
-      console.log(data);
-      searchResult = data;
-      console.log(searchResult);
-      return data;
+      return await response.json();
+    } catch (error) {
+      console.log(`Error fetching data for ${city}`, error.message);
+      return null;
+    }
+  }
+  async function fetchSearchResult() {
+    if (loadingState.getLoadingState === true) {
+      console.log("Still loading");
+      return;
+    }
+    loadingState.setLoadingState(true);
+
+    try {
+      const weatherData = await fetchWeatherData(weatherState.getCurrentCity());
+
+      weatherState.setSearchResult(weatherData);
+      console.log("Fetched search data", weatherData);
+      return weatherData;
     } catch (error) {
       console.log(error.message);
     } finally {
       setTimeout(() => {
-        isLoading = false;
+        loadingState.setLoadingState(false);
         console.log("Finished loading");
       }, 100);
     }
   }
+  function fetchWeekData() {
+    const searchResult = weatherState.getSearchResult();
+    for (let i = 0; i < 7; i++) {
+      weatherState.addWeekData(searchResult.days[i]);
+    }
+    console.log("Fetched week data", weatherState.fetchWeekData());
+    return weatherState.fetchWeekData();
+  }
+  function fetchHoursData() {
+    const searchResult = weatherState.getSearchResult();
+    for (let i = 0; i < 24; i++) {
+      weatherState.addHoursData(searchResult.days[0].hours[i]);
+    }
+    console.log("Fetched hours data", weatherState.fetchHoursData());
+    return weatherState.fetchHoursData();
+  }
+
+  // fetching specific weather data
   async function fetchCityName() {
     const cityName = await searchResult.address;
     const capitalizedName = cityName
@@ -90,25 +157,6 @@ const weather = (function () {
     console.log(typeof Math.round(feelsLikeTemperature));
     return Math.round(feelsLikeTemperature);
   }
-
-  async function fetchHoursData() {
-    hoursData = [];
-    const fetchRequests = [];
-    for (let i = 0; i < 24; i++) {
-      const fetchRequest = await searchResult.days[0].hours[i];
-      console.log(fetchRequest);
-      fetchRequests.push(fetchRequest);
-    }
-    const fetchResults = await Promise.all(fetchRequests);
-    console.log(fetchResults);
-    fetchResults.forEach((data) => {
-      if (data) {
-        console.log("pushed!");
-        hoursData.push(data);
-      }
-    });
-  }
-
   async function fetchHourlyTemperatures() {
     const fetchRequests = hoursData.map(async (hour) => {
       return Math.round(hour.temp);
@@ -127,22 +175,6 @@ const weather = (function () {
     return fetchRequests;
   }
 
-  async function fetchWeekData() {
-    weekData = [];
-    const fetchRequests = [];
-    for (let i = 0; i < 7; i++) {
-      const fetchRequest = await searchResult.days[i];
-      console.log(fetchRequest);
-      fetchRequests.push(fetchRequest);
-    }
-    const fetchResults = await Promise.all(fetchRequests);
-    fetchResults.forEach((data) => {
-      if (data) {
-        weekData.push(data);
-      }
-    });
-    console.log(weekData);
-  }
   async function fetchWeekDay() {}
   async function fetchWeekConditions() {}
   async function fetchWeekTemperatures() {}
@@ -232,7 +264,9 @@ const weather = (function () {
     }
   }
   return {
-    fetchSearchData,
+    handleSearch,
+    fetchWeatherData,
+    fetchSearchResult,
     fetchWorldData,
     fetchWorldCityNames,
     fetchWorldCityTemperatures,
@@ -252,4 +286,4 @@ const weather = (function () {
   };
 })();
 
-export { weather };
+export { weatherState, weather };
