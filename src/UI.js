@@ -95,6 +95,7 @@ const renderSearchUI = (function () {
 
   const hours = document.querySelectorAll(".hours > div");
   const hourWeatherIcons = document.querySelectorAll(".hour-weather-icon");
+  const hourTemperatures = document.querySelectorAll(".hour-temperature");
   const currentWeatherIcon = document.querySelector(".weather-icon");
   const currentWeatherTempFigure = document.querySelector(
     ".temperature-icon > .temperature-figure"
@@ -114,6 +115,19 @@ const renderSearchUI = (function () {
   const precipitationIcons = document.querySelectorAll(".precipitation-icon");
   let start = 0;
   let end = 7;
+
+  function clearResults() {
+    console.log(hourWeatherIcons);
+    console.log(hourTemperatures);
+    hourWeatherIcons.forEach((icon) => {
+      console.log("clearing");
+      icon.innerHTML = "";
+    });
+    hourTemperatures.forEach((temp) => {
+      console.log("clearing");
+      temp.innerHTML = "";
+    });
+  }
 
   async function renderCity() {
     const cityName = document.querySelector(".city-name > p");
@@ -239,40 +253,82 @@ const renderSearchUI = (function () {
     }
   }
 
-  function renderHourlyWeather() {
-    for (let i = 0; i < 8; i++) {
-      hours[i].setAttribute("id", "active-hour");
-    }
+  async function renderHourlyWeather() {
+    const hourlyTemperatures = await weather.fetchHourlyTemperatures();
+    const hourlyConditions = await weather.fetchHourlyConditions();
 
-    hourWeatherIcons.forEach((icon) => {
-      renderCloudyIcon(icon);
+    hourTemperatures.forEach((hour, index) => {
+      const temperature = document.createElement("p");
+      temperature.textContent = hourlyTemperatures[index];
+      const unit = document.createElement("p");
+      unit.textContent = "C";
+      unit.setAttribute("id", "hour-temp-unit");
+      hour.appendChild(temperature);
+      hour.appendChild(unit);
     });
 
-    setInterval(() => {
-      if (start == 16) {
-        start = 0;
-      } else {
-        start++;
+    for (let i = 0; i < hourWeatherIcons.length; i++) {
+      switch (hourlyConditions[i]) {
+        case "clear-day":
+          hourWeatherIcons[i].appendChild(icons.getClearDayIcon());
+          break;
+        case "clear-night":
+          hourWeatherIcons[i].appendChild(icons.getClearNightIcon());
+          break;
+        case "partly-cloudy-day":
+          hourWeatherIcons[i].appendChild(icons.getPartlyCloudyDayIcon());
+          break;
+        case "partly-cloudy-night":
+          hourWeatherIcons[i].appendChild(icons.getPartlyCloudyNightIcon());
+          break;
+        case "cloudy":
+          hourWeatherIcons[i].appendChild(icons.getCloudyIcon());
+          break;
+        case "fog":
+          hourWeatherIcons[i].appendChild(icons.getFogIcon());
+          break;
+        case "wind":
+          hourWeatherIcons[i].appendChild(icons.getWindIcon());
+          break;
+        case "rain":
+          hourWeatherIcons[i].appendChild(icons.getRainIcon());
+          break;
+        case "snow":
+          hourWeatherIcons[i].appendChild(icons.getSnowIcon());
+          break;
       }
-      if (end == 23) {
-        end = 7;
-      } else {
-        end++;
-      }
-      hours.forEach((hour) => {
-        hour.removeAttribute("id", "active-hour");
-      });
+    }
 
-      for (let i = start; i <= end; i++) {
-        hours[i].setAttribute("id", "active-hour");
-      }
-    }, 5000);
+    // setInterval(() => {
+    //   hours.forEach((hour) => {
+    //     hour.removeAttribute("id", "active-hour");
+    //   });
+
+    //   if (start === 16) {
+    //     start = 0;
+    //     end = 7;
+    //   } else {
+    //     start++;
+    //     end++;
+    //   }
+    //   if (end === 23) {
+    //     end = 7;
+    //     start = 0;
+    //   } else {
+    //     end--;
+    //     start--;
+    //   }
+
+    //   for (let i = start; i <= end; i++) {
+    //     hours[i].setAttribute("id", "active-hour");
+    //   }
+    // }, 2000);
   }
   function previousHour() {
     hours.forEach((hour) => {
       hour.removeAttribute("id", "active-hour");
     });
-    if (start == 0) {
+    if (start === 0) {
       start = 16;
       end = 23;
     } else {
@@ -287,7 +343,7 @@ const renderSearchUI = (function () {
     hours.forEach((hour) => {
       hour.removeAttribute("id", "active-hour");
     });
-    if (end == 23) {
+    if (end === 23) {
       start = 0;
       end = 7;
     } else {
@@ -350,6 +406,7 @@ const renderSearchUI = (function () {
     showCurrentWeatherInfo,
     hideCurrentWeatherInfo,
     renderPrecipitationIcons,
+    clearResults,
   };
 })();
 
