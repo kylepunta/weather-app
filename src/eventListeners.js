@@ -46,8 +46,13 @@ const eventHandler = (function () {
     searchBtn.addEventListener("click", async () => {
       const searchResult = await weather.fetchSearchData();
       if (searchResult) {
+        renderSearchUI.clearResults();
         renderSearchUI.renderCity(searchResult.address);
         renderSearchUI.renderCurrentWeather();
+        weather.fetchHoursData().then(() => {
+          renderSearchUI.renderHourlyWeather();
+        });
+        weather.fetchWeekData();
       }
     });
   }
