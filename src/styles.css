@@ -898,3 +898,26 @@ footer {
   color: #666;
   font-size: 0.7rem;
 }
+
+#hour-temp-unit {
+  color: #666;
+  font-size: 0.7rem;
+  position: relative;
+  top: 13px;
+  left: 2px;
+}
+
+.hour-temperature {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.current-weather-description > p {
+  margin: 0;
+  text-align: center;
+  font-size: 20px;
+  position: relative;
+  bottom: 26px;
+  padding-left: 26px;
+}
