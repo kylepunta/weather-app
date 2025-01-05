@@ -52,14 +52,14 @@ const weatherState = (function () {
       (state.currentCountry = state.searchResult.resolvedAddress
         .split(",")
         .pop()),
+    getWorldCities: () => state.worldCities,
   };
 })();
 
 const weather = (function () {
-  const API_Key = "KW6XVPFVXWM4QCFPHLTREZMX2";
+  const API_Key = "2R7G4LV5HPBTDPEQYAMRW4K2U";
   // Handle search function
   async function handleSearch() {
-    renderSearchUI.clearResults();
     weatherState.resetState();
     weatherState.setCurrentCity();
     try {
@@ -69,6 +69,9 @@ const weather = (function () {
       renderSearchUI.renderCityAndCountryName();
       renderSearchUI.renderCurrentWeather();
       renderSearchUI.renderHourlyWeather();
+      renderSearchUI.renderWeeklyWeather();
+      renderSearchUI.renderPrecipitation();
+      renderSearchUI.renderSunriseAndSunset();
     } catch (error) {
       console.log(`Error handling search`, error.message);
     }
@@ -131,7 +134,22 @@ const weather = (function () {
       weatherState.addWeekData(searchResult.days[i]);
     }
     console.log("Fetched week data", weatherState.getWeekData());
-    return weatherState.getWeekData();
+
+    const temps = weatherState.getWeekData().map((day) => {
+      return day.temp;
+    });
+    const icons = weatherState.getWeekData().map((day) => {
+      return day.icon;
+    });
+    const dayNames = weatherState.getWeekData().map((day) => {
+      const date = new Date(day.datetime);
+      const dayName = date.toLocaleDateString("en-US", { weekday: "long" });
+      return dayName;
+    });
+    console.log(temps);
+    console.log(icons);
+    console.log(dayNames);
+    return { temps, icons, dayNames };
   }
   function fetchHoursData() {
     for (let i = 0; i < 24; i++) {
@@ -149,6 +167,31 @@ const weather = (function () {
     });
     return { temps, icons };
   }
+  async function fetchWorldData() {
+    try {
+      const fetchRequests = weatherState.getWorldCities().map(async (city) => {
+        try {
+          const response = await fetch(
+            `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=metric&key=${API_Key}&contentType=json`,
+            { mode: "cors" }
+          );
+          if (!response.ok) {
+            throw new Error(`Response Status: ${response.status}`);
+          }
+          return await response.json();
+        } catch (error) {
+          console.log(error.message);
+        }
+      });
+      const fetchResults = await Promise.all(fetchRequests);
+      fetchResults.forEach((data) => {
+        weatherState.addWorldData(data);
+      });
+      return weatherState.getWorldData();
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
 
   // fetching specific weather data
   function fetchCityAndCountryName() {
@@ -163,126 +206,36 @@ const weather = (function () {
 
     return { cityName, countryName };
   }
-  async function fetchHourlyTemperatures() {
-    const fetchRequests = hoursData.map(async (hour) => {
-      return Math.round(hour.temp);
+  function fetchPrecipitation() {
+    const precipitation = weatherState.getWeekData().map((day) => {
+      return day.precipprob;
     });
-    const fetchResults = await Promise.all(fetchRequests);
-    console.log(fetchResults);
-    return fetchResults;
+    const dayNames = weatherState.getWeekData().map((day) => {
+      const date = new Date(day.datetime);
+      const dayName = date.toLocaleDateString("en-US", { weekday: "long" });
+      return dayName;
+    });
+    console.log(precipitation);
+    return { precipitation, dayNames };
   }
-  async function fetchHourlyConditions() {
-    const fetchRequests = await Promise.all(
-      hoursData.map(async (hour) => {
-        return hour.icon;
-      })
-    );
-    console.log(fetchRequests);
-    return fetchRequests;
-  }
-
-  async function fetchWeekDay() {}
-  async function fetchWeekConditions() {}
-  async function fetchWeekTemperatures() {}
-
-  async function fetchWorldData() {
-    try {
-      const fetchRequests = worldCities.map(async (city) => {
-        try {
-          const response = await fetch(
-            `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=metric&key=2R7G4LV5HPBTDPEQYAMRW4K2U&contentType=json`,
-            { mode: "cors" }
-          );
-          if (!response.ok) {
-            throw new Error(`Response Status: ${response.status}`);
-          }
-          const data = await response.json();
-          return data;
-        } catch (error) {
-          console.log(`Error fetching data for ${city}`, error.message);
-        }
-      });
-      const fetchResults = await Promise.all(fetchRequests);
-      fetchResults.forEach((data) => {
-        if (data) {
-          worldData.push(data);
-        }
-      });
-      worldData.forEach((data) => {
-        console.log(data);
-      });
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-  async function fetchWorldCityNames() {
-    try {
-      const cityNameRequests = worldData.map((city) => {
-        try {
-          const cityName = city.address;
-          console.log(cityName);
-          return cityName;
-        } catch (error) {
-          console.log(`Error fetching name for ${city}`, error.message);
-        }
-      });
-      const cityNameResults = await Promise.all(cityNameRequests);
-      return cityNameResults;
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-  async function fetchWorldCityTemperatures() {
-    try {
-      const fetchRequests = worldData.map((city) => {
-        try {
-          const temperature = Math.round(city.currentConditions.temp);
-          console.log(temperature);
-          return temperature;
-        } catch (error) {
-          console.log(`Error fetching temperature for ${city}`, error.message);
-        }
-      });
-      const fetchResults = await Promise.all(fetchRequests);
-      return fetchResults;
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-  async function fetchWorldCityConditions() {
-    try {
-      const fetchRequests = worldData.map((city) => {
-        try {
-          const tempConditions = city.currentConditions.icon;
-          console.log(tempConditions);
-          return tempConditions;
-        } catch (error) {
-          console.log(
-            `Error fetching temperature conditions for ${city}`,
-            error.message
-          );
-        }
-      });
-      const fetchResults = await Promise.all(fetchRequests);
-      return fetchResults;
-    } catch (error) {
-      console.log(error.message);
-    }
+  function fetchSunRiseAndSunsetTimes() {
+    const sunrise = weatherState.getCurrentData().sunrise.slice(0, 5);
+    const sunset = weatherState.getCurrentData().sunset.slice(0, 5);
+    console.log(sunrise);
+    console.log(sunset);
+    return { sunrise, sunset };
   }
   return {
     handleSearch,
     fetchWeatherData,
     fetchSearchResult,
     fetchWorldData,
-    fetchWorldCityNames,
-    fetchWorldCityTemperatures,
-    fetchWorldCityConditions,
     fetchCityAndCountryName,
     fetchHoursData,
-    fetchHourlyTemperatures,
-    fetchHourlyConditions,
     fetchWeekData,
     fetchCurrentData,
+    fetchPrecipitation,
+    fetchSunRiseAndSunsetTimes,
   };
 })();
 
