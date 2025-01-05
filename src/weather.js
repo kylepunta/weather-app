@@ -1,4 +1,6 @@
-import { loadingState, renderSearchUI } from "./UI.js";
+import { loadingState, renderSearchUI, renderWorldUI } from "./UI.js";
+import { settingsState, settings } from "./settings.js";
+import { initialize } from "./UI.js";
 
 const weatherState = (function () {
   let state = {
@@ -22,6 +24,14 @@ const weatherState = (function () {
     getState: () => state,
     resetState: () =>
       (state = {
+        worldCities: [
+          "New York",
+          "London",
+          "Sydney",
+          "Tokyo",
+          "Berlin",
+          "Los Angeles",
+        ],
         searchResult: [],
         worldData: [],
         currentData: null,
@@ -57,13 +67,16 @@ const weatherState = (function () {
 })();
 
 const weather = (function () {
-  const API_Key = "2R7G4LV5HPBTDPEQYAMRW4K2U";
+  const API_Key = "FJ2QDPGZU5NNPUNVN36QTF3JW";
   // Handle search function
   async function handleSearch() {
+    console.log("Current unit", settingsState.getTemperatureUnit());
     weatherState.resetState();
     weatherState.setCurrentCity();
+    console.log("Current unit", settingsState.getTemperatureUnit());
     try {
       const searchResult = await fetchSearchResult();
+      console.log("Current unit", settingsState.getTemperatureUnit());
       weatherState.setSearchResult(searchResult);
       weatherState.setCurrentCountry();
       renderSearchUI.renderCityAndCountryName();
@@ -72,8 +85,22 @@ const weather = (function () {
       renderSearchUI.renderWeeklyWeather();
       renderSearchUI.renderPrecipitation();
       renderSearchUI.renderSunriseAndSunset();
+      loadingState.setLoadingState(false);
+      console.log("Current unit", settingsState.getTemperatureUnit());
+      renderWorldUI.toggleWorldWeather();
+      console.log("Current unit", settingsState.getTemperatureUnit());
+      if (settingsState.getTemperatureUnit() === "celsius") {
+        settings.selectCelsius();
+      } else {
+        settings.selectFahrenheit();
+        settings.convertCelsiusToFahrenheit();
+      }
     } catch (error) {
       console.log(`Error handling search`, error.message);
+      loadingState.setLoadingState(true);
+      renderSearchUI.renderNoResult(weatherState.getCurrentCity());
+      weatherState.resetState();
+      settingsState.resetState();
     }
   }
   // fetching general weather data
@@ -107,11 +134,10 @@ const weather = (function () {
       return weatherData;
     } catch (error) {
       console.log(error.message);
-    } finally {
-      setTimeout(() => {
-        loadingState.setLoadingState(false);
-        console.log("Finished loading");
-      }, 100);
+      // } finally {
+      //   setTimeout(() => {
+      //     console.log("Finished loading");
+      //   }, 100);
     }
   }
   function fetchCurrentData() {

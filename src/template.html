@@ -21,7 +21,43 @@
       </div>
     </header>
     <main>
-      <section>
+      <section class="loading">
+        <div class="loading-page">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            style="margin: auto; background: none; display: block"
+            width="100px"
+            height="100px"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="xMidYMid"
+          >
+            <circle
+              cx="50"
+              cy="50"
+              fill="none"
+              stroke="#000"
+              stroke-width="8"
+              r="35"
+              stroke-dasharray="164.93361431346415 56.97787143782138"
+            >
+              <animateTransform
+                attributeName="transform"
+                type="rotate"
+                repeatCount="indefinite"
+                dur="1s"
+                values="0 50 50;360 50 50"
+                keyTimes="0;1"
+              ></animateTransform>
+            </circle>
+          </svg>
+        </div>
+        <div class="hidden">
+          <p></p>
+          <button class="back-button">Back</button>
+        </div>
+      </section>
+      <section class="search-container hidden">
         <form>
           <div class="search-box">
             <div class="search-button">
@@ -47,7 +83,7 @@
           </div>
         </form>
       </section>
-      <section id="city-country">
+      <section id="city-country" class="hidden">
         <div>
           <div class="city-name">
             <h4>City:</h4>
@@ -59,7 +95,7 @@
           </div>
         </div>
       </section>
-      <section>
+      <section class="current-hourly-weather-container hidden">
         <div class="current-weather-container">
           <div class="current-weather-header">
             <div class="current-weather-heading">
@@ -72,7 +108,7 @@
           <div class="current-weather-info">
             <div class="weather-icon"></div>
             <div class="temperature-icon">
-              <p class="temperature-figure">10°</p>
+              <p class="temperature-figure temp">10°</p>
               <p class="unit temp-unit">C</p>
             </div>
             <div class="current-weather-description">
@@ -383,7 +419,7 @@
           </div>
         </div>
       </section>
-      <section>
+      <section class="week-and-sun-container hidden">
         <div class="weekly-weather-container">
           <div class="weekly-weather-header">
             <div>
@@ -784,7 +820,7 @@
         </div>
       </section>
     </main>
-    <aside>
+    <aside class="hidden">
       <div class="settings-header">
         <h3>Settings</h3>
         <div class="close-settings-button">

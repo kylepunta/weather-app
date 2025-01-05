@@ -1,26 +1,58 @@
 import { icons as weatherIconsModule } from "./icons.js";
 import { weather, weatherState } from "./weather.js";
 import { DOM } from "./domQueries.js";
+import { settings, settingsState } from "./settings.js";
+import { eventHandler } from "./eventListeners.js";
 const loadingState = (function () {
   let state = {
     isLoading: false,
   };
   return {
-    getLoadingState: () => state,
-    setLoadingState: (status) => (state = { isLoading: status }),
+    getLoadingState: () => state.isLoading,
+    setLoadingState: (status) => {
+      state.isLoading = status;
+      if (status) {
+        console.log(DOM.content.loading);
+        console.log(DOM.content.sections);
+        DOM.content.loading.classList.remove("hidden");
+        DOM.content.sections.forEach((section) => {
+          section.classList.add("hidden");
+        });
+      } else {
+        DOM.content.loading.classList.add("hidden");
+        DOM.content.sections.forEach((section) => {
+          section.classList.remove("hidden");
+        });
+      }
+    },
   };
 })();
+
+const initialize = function () {
+  console.log("Initializing...");
+
+  settingsState.setTemperatureUnit("celsius");
+  eventHandler.addMenuBtnListeners();
+  eventHandler.addSettingsListeners();
+  eventHandler.addSearchListeners();
+  eventHandler.addArrowListeners();
+  eventHandler.addBackBtnListeners();
+
+  DOM.hourlyWeather.hours[0].classList.add("first-hour");
+  DOM.hourlyWeather.hours[7].classList.add("last-hour");
+
+  for (let i = 0; i < 8; i++) {
+    DOM.hourlyWeather.hours[i].setAttribute("id", "active-hour");
+  }
+};
 
 const renderWorldUI = (function () {
   DOM.worldWeather.infos.forEach((info) => {
     const p = document.createElement("p");
     info.appendChild(p);
   });
-  function hideWorldWeatherInfo() {
-    DOM.worldWeather.section.setAttribute("id", "hidden");
-  }
-  function showWorldWeatherInfo() {
-    DOM.worldWeather.section.removeAttribute("id", "hidden");
+  function toggleWorldWeather() {
+    DOM.worldWeather.section.classList.toggle("hidden");
   }
   function renderWorldWeather() {
     const worldNames = weatherState.getWorldData().map((city) => {
@@ -41,6 +73,7 @@ const renderWorldUI = (function () {
       temp.textContent = worldTemps[index];
     });
     DOM.worldWeather.icons.forEach((icon, index) => {
+      icon.innerHTML = "";
       switch (worldIcons[index]) {
         case "clear-day":
           icon.appendChild(weatherIconsModule.getClearDayIcon());
@@ -82,9 +115,8 @@ const renderWorldUI = (function () {
     });
   }
   return {
-    hideWorldWeatherInfo,
-    showWorldWeatherInfo,
     renderWorldWeather,
+    toggleWorldWeather,
   };
 })();
 
@@ -92,12 +124,24 @@ const renderSearchUI = (function () {
   let start = 0;
   let end = 7;
 
+  function renderNoResult(city) {
+    DOM.content.noResultText.textContent = `No result found for ${city}`;
+    DOM.content.noResultSection.classList.toggle("hidden");
+    DOM.content.loadingPage.classList.toggle("hidden");
+  }
   function clearResults() {}
   async function renderCityAndCountryName() {
     const { cityName, countryName } = weather.fetchCityAndCountryName();
     DOM.search.city.textContent = cityName;
 
     DOM.search.country.textContent = countryName;
+  }
+  function toggleSearchWeather() {
+    console.log(DOM.content.searchWeather);
+    DOM.content.searchWeather.forEach((section) => {
+      section.classList.toggle("hidden");
+    });
+    console.log(DOM.content.searchWeather);
   }
   async function renderCurrentWeather() {
     const { temp, icon, windSpeed, UVIndex, humidity, feelsLikeTemp } =
@@ -329,20 +373,6 @@ const renderSearchUI = (function () {
     DOM.sunTimes.sunrise.textContent = sunrise;
     DOM.sunTimes.sunset.textContent = sunset;
   }
-  function hideCurrentWeatherInfo() {
-    const sections = document.querySelectorAll("section");
-    for (let i = 1; i < sections.length - 1; i++) {
-      DOM.content.sections[i].setAttribute("id", "hidden");
-    }
-  }
-
-  function showCurrentWeatherInfo() {
-    const sections = document.querySelectorAll("section");
-    for (let i = 1; i < sections.length - 1; i++) {
-      DOM.content.sections[i].removeAttribute("id", "hidden");
-    }
-  }
-
   function previousHour() {
     DOM.hourlyWeather.hours.forEach((hour) => {
       hour.removeAttribute("id", "active-hour");
@@ -381,12 +411,12 @@ const renderSearchUI = (function () {
     previousHour,
     renderHourlyWeather,
     renderCurrentWeather,
-    showCurrentWeatherInfo,
-    hideCurrentWeatherInfo,
     clearResults,
     renderPrecipitation,
     renderSunriseAndSunset,
+    toggleSearchWeather,
+    renderNoResult,
   };
 })();
 
-export { loadingState, renderWorldUI, renderSearchUI };
+export { loadingState, initialize, renderWorldUI, renderSearchUI };

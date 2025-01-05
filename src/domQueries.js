@@ -1,8 +1,16 @@
 export const DOM = {
   content: {
-    sections: document.querySelectorAll("section"),
+    sections: document.querySelectorAll("section:not(section:first-child)"),
     units: document.querySelectorAll(".temp-unit"),
     temps: document.querySelectorAll(".temp"),
+    loading: document.querySelector(".loading"),
+    searchWeather: document.querySelectorAll(
+      "#city-country, .current-hourly-weather-container, .week-and-sun-container"
+    ),
+    noResultSection: document.querySelector(".loading > div:last-child"),
+    noResultText: document.querySelector(".loading p"),
+    loadingPage: document.querySelector(".loading-page"),
+    backButton: document.querySelector(".back-button"),
   },
   settings: {
     settings: document.querySelector("aside"),
@@ -25,7 +33,7 @@ export const DOM = {
     temperatures: document.querySelectorAll(".world-city-temperature > .temp"),
     infos: document.querySelectorAll(".world-city-info"),
     names: document.querySelectorAll(".world-city-name > p"),
-    section: document.querySelector("section:last-of-type"),
+    section: document.querySelector("#world-weather"),
   },
   currentWeather: {
     icon: document.querySelector(".weather-icon"),
