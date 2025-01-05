@@ -1,55 +1,49 @@
 import { renderSearchUI } from "./UI.js";
-import { weatherState, weather } from "./weather.js";
+import { weather } from "./weather.js";
+import { DOM } from "./domQueries.js";
+import { settings } from "./settings.js";
 
 const eventHandler = (function () {
-  const menuBtn = document.querySelector(".menu-button");
-  const settings = document.querySelector("aside");
-  const closeSettingsBtn = document.querySelector(".close-settings-button");
-  const fahrenheit = document.querySelector(".fahrenheit");
-  const celsius = document.querySelector(".celsius");
-  const tickBoxes = document.querySelectorAll("#tick-box");
-  const searchInput = document.querySelector("#location");
-  const searchBox = document.querySelector(".search-box");
-  const searchBtn = document.querySelector("#search-button");
-  const leftArrow = document.querySelector(".left-arrow");
-  const rightArrow = document.querySelector(".right-arrow");
-
   function addMenuBtnListeners() {
-    menuBtn.addEventListener("click", () => {
-      settings.classList.toggle("hidden");
+    DOM.settings.menu.addEventListener("click", () => {
+      DOM.settings.settings.classList.toggle("hidden");
     });
   }
   function addSettingsListeners() {
-    closeSettingsBtn.addEventListener("click", () => {
-      settings.classList.toggle("hidden");
+    DOM.settings.close.addEventListener("click", () => {
+      DOM.settings.settings.classList.toggle("hidden");
     });
-    fahrenheit.addEventListener("click", () => {
-      tickBoxes[0].setAttribute("id", "active-button");
-      tickBoxes[1].removeAttribute("id", "active-button");
+    DOM.settings.fahrenheit.addEventListener("click", () => {
+      DOM.settings.tickBoxes[0].setAttribute("id", "active-button");
+      DOM.settings.tickBoxes[1].removeAttribute("id", "active-button");
+      settings.selectFahrenheit();
+      settings.convertCelsiusToFahrenheit();
     });
-    celsius.addEventListener("click", () => {
-      tickBoxes[0].removeAttribute("id", "active-button");
-      tickBoxes[1].setAttribute("id", "active-button");
+    DOM.settings.celsius.addEventListener("click", () => {
+      DOM.settings.tickBoxes[0].removeAttribute("id", "active-button");
+      DOM.settings.tickBoxes[1].setAttribute("id", "active-button");
+      settings.selectCelsius();
+      settings.convertFahrenheitToCelsius();
     });
   }
   function addSearchListeners() {
-    searchInput.addEventListener("focus", () => {
-      searchBox.classList.add("active");
-      searchBtn.setAttribute("id", "active-button");
+    DOM.search.searchInput.addEventListener("focus", () => {
+      DOM.search.searchBox.classList.add("active");
+      DOM.search.searchButton.setAttribute("id", "active-button");
     });
 
-    searchInput.addEventListener("blur", () => {
-      searchBox.classList.remove("active");
-      searchBtn.removeAttribute("id", "active-button");
+    DOM.search.searchInput.addEventListener("blur", () => {
+      DOM.search.searchBox.classList.remove("active");
+      DOM.search.searchButton.removeAttribute("id", "active-button");
     });
 
-    searchBtn.addEventListener("click", weather.handleSearch);
+    DOM.search.searchButton.addEventListener("click", weather.handleSearch);
   }
   function addArrowListeners() {
-    leftArrow.addEventListener("click", () => {
+    DOM.hourlyWeather.leftArrow.addEventListener("click", () => {
       renderSearchUI.previousHour();
     });
-    rightArrow.addEventListener("click", () => {
+    DOM.hourlyWeather.rightArrow.addEventListener("click", () => {
       renderSearchUI.nextHour();
     });
   }
