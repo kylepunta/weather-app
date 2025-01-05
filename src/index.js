@@ -1,34 +1,43 @@
 import "./styles.css";
 import { eventHandler } from "./eventListeners.js";
 import { renderSearchUI, renderWorldUI } from "./UI.js";
+import { weatherState, weather } from "./weather.js";
+import { DOM } from "./domQueries.js";
+import { settings } from "./settings.js";
 
-const settings = document.querySelector("aside");
-const tickBoxes = document.querySelectorAll("#tick-box");
+document.addEventListener("DOMContentLoaded", () => {
+  settings.selectCelsius();
+  console.log("DOM.worldWeather.descriptions:", DOM.worldWeather.infos);
+  console.log("Length of descriptions:", DOM.worldWeather.infos.length);
+  console.log("Length of world data:", weatherState.getWorldData().length);
+  console.log("DOM.worldWeather.temperatures", DOM.worldWeather.temperatures);
 
-settings.classList.add("hidden");
-tickBoxes[1].setAttribute("id", "active-setting");
+  DOM.settings.settings.classList.add("hidden");
+  DOM.settings.tickBoxes[1].setAttribute("id", "active-setting");
 
-eventHandler.addMenuBtnListeners();
-eventHandler.addSettingsListeners();
-eventHandler.addSearchListeners();
+  eventHandler.addMenuBtnListeners();
+  eventHandler.addSettingsListeners();
+  eventHandler.addSearchListeners();
 
-const hours = document.querySelectorAll(".hours > div");
+  DOM.hourlyWeather.hours[0].classList.add("first-hour");
+  DOM.hourlyWeather.hours[7].classList.add("last-hour");
 
-hours[0].classList.add("first-hour");
-hours[7].classList.add("last-hour");
+  for (let i = 0; i < 8; i++) {
+    DOM.hourlyWeather.hours[i].setAttribute("id", "active-hour");
+  }
 
-for (let i = 0; i < 8; i++) {
-  hours[i].setAttribute("id", "active-hour");
-}
+  eventHandler.addArrowListeners();
 
-eventHandler.addArrowListeners();
-renderSearchUI.renderWeeklyWeather();
-renderSearchUI.renderWeeklyWeatherInfo();
-renderSearchUI.renderPrecipitationIcons();
+  // renderSearchUI.hideCurrentWeatherInfo();
+  renderWorldUI.hideWorldWeatherInfo();
 
-// renderSearchUI.hideCurrentWeatherInfo();
-renderWorldUI.hideWorldWeatherInfo();
-
-// weather.fetchWorldData().then(() => {
-//   renderWorldUI.renderWorldWeather();
-// });
+  weather
+    .fetchWorldData()
+    .then(() => {
+      console.log(weatherState.getWorldData());
+      renderWorldUI.renderWorldWeather();
+    })
+    .then(() => {
+      renderWorldUI.showWorldWeatherInfo();
+    });
+});
