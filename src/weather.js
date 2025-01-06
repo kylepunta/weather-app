@@ -1,6 +1,10 @@
-import { loadingState, renderSearchUI, renderWorldUI } from "./UI.js";
+import {
+  loadingState,
+  removeSVGTitles,
+  renderSearchUI,
+  renderWorldUI,
+} from "./UI.js";
 import { settingsState, settings } from "./settings.js";
-import { initialize } from "./UI.js";
 
 const weatherState = (function () {
   let state = {
@@ -19,6 +23,7 @@ const weatherState = (function () {
     hoursData: [],
     currentCity: null,
     currentCountry: null,
+    currentTime: null,
   };
   return {
     getState: () => state,
@@ -39,6 +44,7 @@ const weatherState = (function () {
         hoursData: [],
         currentCity: null,
         currentCountry: null,
+        currentTime: null,
       }),
     setSearchResult: (data) => (state.searchResult = data),
     getSearchResult: () => state.searchResult,
@@ -63,16 +69,26 @@ const weatherState = (function () {
         .split(",")
         .pop()),
     getWorldCities: () => state.worldCities,
+    getCurrentTime: () => state.currentTime,
+    setCurrentTime: () => {
+      const date = new Date();
+      const fullTime = date.toLocaleTimeString().split(":");
+      console.log("Full Time:", fullTime);
+      const timeToDisplay = fullTime[0] + ":" + fullTime[1];
+      console.log("Time to display:", timeToDisplay);
+      state.currentTime = timeToDisplay;
+    },
   };
 })();
 
 const weather = (function () {
-  const API_Key = "FJ2QDPGZU5NNPUNVN36QTF3JW";
+  const API_Key = "2R7G4LV5HPBTDPEQYAMRW4K2U";
   // Handle search function
   async function handleSearch() {
     console.log("Current unit", settingsState.getTemperatureUnit());
     weatherState.resetState();
     weatherState.setCurrentCity();
+    weatherState.setCurrentTime();
     console.log("Current unit", settingsState.getTemperatureUnit());
     try {
       const searchResult = await fetchSearchResult();
@@ -85,6 +101,7 @@ const weather = (function () {
       renderSearchUI.renderWeeklyWeather();
       renderSearchUI.renderPrecipitation();
       renderSearchUI.renderSunriseAndSunset();
+      removeSVGTitles();
       loadingState.setLoadingState(false);
       console.log("Current unit", settingsState.getTemperatureUnit());
       renderWorldUI.toggleWorldWeather();
@@ -162,7 +179,7 @@ const weather = (function () {
     console.log("Fetched week data", weatherState.getWeekData());
 
     const temps = weatherState.getWeekData().map((day) => {
-      return day.temp;
+      return Math.round(day.temp);
     });
     const icons = weatherState.getWeekData().map((day) => {
       return day.icon;

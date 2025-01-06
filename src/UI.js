@@ -1,16 +1,29 @@
 import { icons as weatherIconsModule } from "./icons.js";
 import { weather, weatherState } from "./weather.js";
 import { DOM } from "./domQueries.js";
-import { settings, settingsState } from "./settings.js";
+import { settingsState } from "./settings.js";
 import { eventHandler } from "./eventListeners.js";
+
+const removeSVGTitles = function () {
+  const svgs = document.querySelectorAll("svg");
+  svgs.forEach((svg) => {
+    svg.querySelector("title")?.remove();
+  });
+};
 const loadingState = (function () {
   let state = {
     isLoading: false,
+    isArrowClicked: false,
   };
   return {
+    isArrowClicked: () => state.isArrowClicked,
+    setArrowClicked: (boolean) => (state.isArrowClicked = boolean),
     getLoadingState: () => state.isLoading,
     setLoadingState: (status) => {
       state.isLoading = status;
+      DOM.settings.temperatures.forEach((temperature) => {
+        temperature.classList.toggle("disabled");
+      });
       if (status) {
         console.log(DOM.content.loading);
         console.log(DOM.content.sections);
@@ -31,26 +44,24 @@ const loadingState = (function () {
 const initialize = function () {
   console.log("Initializing...");
 
+  weatherState.setCurrentTime();
+  renderSearchUI.renderCurrentTime();
+
   settingsState.setTemperatureUnit("celsius");
   eventHandler.addMenuBtnListeners();
   eventHandler.addSettingsListeners();
   eventHandler.addSearchListeners();
   eventHandler.addArrowListeners();
   eventHandler.addBackBtnListeners();
+  eventHandler.addLogoListeners();
 
-  DOM.hourlyWeather.hours[0].classList.add("first-hour");
-  DOM.hourlyWeather.hours[7].classList.add("last-hour");
-
-  for (let i = 0; i < 8; i++) {
-    DOM.hourlyWeather.hours[i].setAttribute("id", "active-hour");
-  }
+  setInterval(() => {
+    weatherState.setCurrentTime();
+    renderSearchUI.renderCurrentTime();
+  }, 60000);
 };
 
 const renderWorldUI = (function () {
-  DOM.worldWeather.infos.forEach((info) => {
-    const p = document.createElement("p");
-    info.appendChild(p);
-  });
   function toggleWorldWeather() {
     DOM.worldWeather.section.classList.toggle("hidden");
   }
@@ -63,6 +74,48 @@ const renderWorldUI = (function () {
     });
     const worldIcons = weatherState.getWorldData().map((city) => {
       return city.currentConditions.icon;
+    });
+    DOM.worldWeather.infos.forEach((info, index) => {
+      info.innerHTML = "";
+      const p = document.createElement("p");
+      switch (worldIcons[index]) {
+        case "clear-day":
+          p.textContent = "Sunny";
+          info.appendChild(p);
+          break;
+        case "clear-night":
+          p.textContent = "Clear";
+          info.appendChild(p);
+          break;
+        case "partly-cloudy-day":
+          p.textContent = "Partly Cloudy";
+          info.appendChild(p);
+          break;
+        case "partly-cloudy-night":
+          p.textContent = "Partly Cloudy";
+          info.appendChild(p);
+          break;
+        case "cloudy":
+          p.textContent = "Cloudy";
+          info.appendChild(p);
+          break;
+        case "fog":
+          p.textContent = "Foggy";
+          info.appendChild(p);
+          break;
+        case "wind":
+          p.textContent = "Windy";
+          info.appendChild(p);
+          break;
+        case "rain":
+          p.textContent = "Rainy";
+          info.appendChild(p);
+          break;
+        case "snow":
+          p.textContent = "Snowy";
+          info.appendChild(p);
+          break;
+      }
     });
     DOM.worldWeather.names.forEach((name, index) => {
       console.log(name);
@@ -77,39 +130,30 @@ const renderWorldUI = (function () {
       switch (worldIcons[index]) {
         case "clear-day":
           icon.appendChild(weatherIconsModule.getClearDayIcon());
-          DOM.worldWeather.infos[index].textContent = "Sunny";
           break;
         case "clear-night":
           icon.appendChild(weatherIconsModule.getClearNightIcon());
-          DOM.worldWeather.infos[index].textContent = "Clear";
           break;
         case "partly-cloudy-day":
           icon.appendChild(weatherIconsModule.getPartlyCloudyDayIcon());
-          DOM.worldWeather.infos[index].textContent = "Partly Cloudy";
           break;
         case "partly-cloudy-night":
           icon.appendChild(weatherIconsModule.getPartlyCloudyNightIcon());
-          DOM.worldWeather.infos[index].textContent = "Partly Cloudy";
           break;
         case "cloudy":
           icon.appendChild(weatherIconsModule.getCloudyIcon());
-          DOM.worldWeather.infos[index].textContent = "Cloudy";
           break;
         case "fog":
           icon.appendChild(weatherIconsModule.getFogIcon());
-          DOM.worldWeather.infos[index].textContent = "Foggy";
           break;
         case "wind":
           icon.appendChild(weatherIconsModule.getWindIcon());
-          DOM.worldWeather.infos[index].textContent = "Windy";
           break;
         case "rain":
           icon.appendChild(weatherIconsModule.getRainIcon());
-          DOM.worldWeather.infos[index].textContent = "Rainy";
           break;
         case "snow":
           icon.appendChild(weatherIconsModule.getSnowIcon());
-          DOM.worldWeather.infos[index].textContent = "Snowy";
           break;
       }
     });
@@ -124,6 +168,26 @@ const renderSearchUI = (function () {
   let start = 0;
   let end = 7;
 
+  function selectHour() {
+    const hour = weatherState.getCurrentTime().slice(0, 2);
+
+    if (hour <= 16) {
+      start = parseInt(hour);
+      end = start + 7;
+    } else {
+      start = 16;
+      end = 23;
+    }
+    DOM.hourlyWeather.hours[start].classList.add("first-hour");
+    DOM.hourlyWeather.hours[end].classList.add("last-hour");
+
+    for (let i = parseInt(start); i <= parseInt(end); i++) {
+      DOM.hourlyWeather.hours[i].classList.toggle("active-hour");
+    }
+  }
+  function renderCurrentTime() {
+    DOM.content.timeDisplay.textContent = weatherState.getCurrentTime();
+  }
   function renderNoResult(city) {
     DOM.content.noResultText.textContent = `No result found for ${city}`;
     DOM.content.noResultSection.classList.toggle("hidden");
@@ -261,30 +325,28 @@ const renderSearchUI = (function () {
       }
     }
 
-    // setInterval(() => {
-    //   hours.forEach((hour) => {
-    //     hour.removeAttribute("id", "active-hour");
-    //   });
+    renderSearchUI.selectHour();
 
-    //   if (start === 16) {
-    //     start = 0;
-    //     end = 7;
-    //   } else {
-    //     start++;
-    //     end++;
-    //   }
-    //   if (end === 23) {
-    //     end = 7;
-    //     start = 0;
-    //   } else {
-    //     end--;
-    //     start--;
-    //   }
+    setInterval(() => {
+      if (!loadingState.isArrowClicked()) {
+        DOM.hourlyWeather.hours.forEach((hour) => {
+          hour.classList.remove("active-hour");
+        });
 
-    //   for (let i = start; i <= end; i++) {
-    //     hours[i].setAttribute("id", "active-hour");
-    //   }
-    // }, 2000);
+        if (end === 23) {
+          start = 0;
+          end = 7;
+        } else {
+          start++;
+          end++;
+        }
+
+        for (let i = start; i <= end; i++) {
+          DOM.hourlyWeather.hours[i].classList.toggle("active-hour");
+        }
+      }
+      loadingState.setArrowClicked(false);
+    }, 5000);
   }
   function renderWeeklyWeather() {
     const { temps, icons, dayNames } = weather.fetchWeekData();
@@ -375,7 +437,7 @@ const renderSearchUI = (function () {
   }
   function previousHour() {
     DOM.hourlyWeather.hours.forEach((hour) => {
-      hour.removeAttribute("id", "active-hour");
+      hour.classList.remove("active-hour");
     });
     if (start === 0) {
       start = 16;
@@ -385,12 +447,12 @@ const renderSearchUI = (function () {
       end--;
     }
     for (let i = start; i <= end; i++) {
-      DOM.hourlyWeather.hours[i].setAttribute("id", "active-hour");
+      DOM.hourlyWeather.hours[i].classList.toggle("active-hour");
     }
   }
   function nextHour() {
     DOM.hourlyWeather.hours.forEach((hour) => {
-      hour.removeAttribute("id", "active-hour");
+      hour.classList.remove("active-hour");
     });
     if (end === 23) {
       start = 0;
@@ -400,11 +462,12 @@ const renderSearchUI = (function () {
       start++;
     }
     for (let i = start; i <= end; i++) {
-      DOM.hourlyWeather.hours[i].setAttribute("id", "active-hour");
+      DOM.hourlyWeather.hours[i].classList.toggle("active-hour");
     }
   }
 
   return {
+    selectHour,
     renderCityAndCountryName,
     renderWeeklyWeather,
     nextHour,
@@ -416,7 +479,14 @@ const renderSearchUI = (function () {
     renderSunriseAndSunset,
     toggleSearchWeather,
     renderNoResult,
+    renderCurrentTime,
   };
 })();
 
-export { loadingState, initialize, renderWorldUI, renderSearchUI };
+export {
+  removeSVGTitles,
+  loadingState,
+  initialize,
+  renderWorldUI,
+  renderSearchUI,
+};

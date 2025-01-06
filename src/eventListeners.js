@@ -32,6 +32,8 @@ const eventHandler = (function () {
         .catch((error) => {
           console.log("Error fetching world data", error);
           loadingState.setLoadingState(false);
+          renderSearchUI.toggleSearchWeather();
+          renderWorldUI.toggleWorldWeather();
         });
     });
   }
@@ -68,15 +70,33 @@ const eventHandler = (function () {
       DOM.search.searchBox.classList.remove("active");
       DOM.search.searchButton.removeAttribute("id", "active-button");
     });
-
-    DOM.search.searchButton.addEventListener("click", weather.handleSearch);
+    DOM.search.searchInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        if (DOM.search.searchInput.value != "") {
+          weather.handleSearch();
+        }
+      }
+    });
+    DOM.search.searchButton.addEventListener("click", () => {
+      if (DOM.search.searchInput.value != "") {
+        weather.handleSearch();
+      }
+    });
   }
   function addArrowListeners() {
     DOM.hourlyWeather.leftArrow.addEventListener("click", () => {
+      loadingState.setArrowClicked(true);
       renderSearchUI.previousHour();
     });
     DOM.hourlyWeather.rightArrow.addEventListener("click", () => {
+      loadingState.setArrowClicked(true);
       renderSearchUI.nextHour();
+    });
+  }
+  function addLogoListeners() {
+    DOM.content.logo.addEventListener("click", () => {
+      location.reload(true);
     });
   }
   return {
@@ -85,6 +105,7 @@ const eventHandler = (function () {
     addSearchListeners,
     addArrowListeners,
     addBackBtnListeners,
+    addLogoListeners,
   };
 })();
 

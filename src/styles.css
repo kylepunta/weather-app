@@ -1,11 +1,35 @@
+:root {
+  --header-font: "poppins, sans-serif";
+  --text-font: "roboto, sans-serif";
+}
+
 html,
 body {
   height: 100%;
   margin: 0;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    "Open Sans",
+    "Helvetica Neue",
+    sans-serif;
 }
 
 * {
   box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--header-font);
 }
 
 body {
@@ -15,6 +39,10 @@ body {
     "main"
     "footer";
   grid-template-rows: auto 1fr auto;
+}
+
+p {
+  font-family: var(--text-font);
 }
 
 header {
@@ -33,12 +61,58 @@ main {
   display: flex;
   flex-direction: column;
   background-color: #f4f8ff;
+  /* animation: moveBackgroundColor 15s infinite alternate; */
+  /* background: linear-gradient(45deg, #daf1ff, #fff, #daf1ff);
+  background-size: 600% 600%;
+  animation: gradientShift 10s linear infinite; */
+}
+
+@keyframes moveSearchBackgroundColor {
+  0% {
+    background-color: #ddeaff;
+  }
+  50% {
+    background-color: #ebf2ff;
+  }
+  100% {
+    background-color: white;
+  }
+}
+
+@keyframes moveBackgroundColor {
+  0% {
+    background-color: white;
+  }
+  50% {
+    background-color: white;
+  }
+  100% {
+    background-color: #ddeaff;
+  }
+}
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 100% 50%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  75% {
+    background-position: 0% 100%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 footer {
   grid-area: footer;
   background-color: #0e2b59;
   color: #fff;
+  padding: 14px 0px;
 }
 
 h1 {
@@ -109,6 +183,15 @@ aside {
   box-shadow: 0px 0px 4px #0e2b59;
   margin-bottom: 44px;
   background-color: #ebf1ff;
+  /* animation: moveSearchBackgroundColor 15s infinite alternate; */
+  background: linear-gradient(45deg, #adcaf7, #ebf1ff, #adcaf7);
+  background-size: auto;
+  background-size: 600% 600%;
+  animation: gradientShift 20s linear infinite;
+}
+
+.search-container:hover {
+  background-color: #cadfff;
 }
 
 form {
@@ -311,10 +394,6 @@ form {
   padding: 0px 60px;
 }
 
-.weekly-weather-header > div:nth-child(1) {
-  padding-left: 16px;
-}
-
 .weekly-weather-header > div:nth-child(2) {
   padding-right: 16px;
 }
@@ -403,10 +482,10 @@ p {
   display: none;
 }
 
-#active-hour {
-  display: grid;
-  flex: 1;
-  grid-template-rows: auto;
+.active-hour {
+  display: grid !important;
+  flex: 1 !important;
+  grid-template-rows: auto !important;
 }
 
 .hours-frame {
@@ -469,8 +548,8 @@ p {
   cursor: pointer;
 }
 
-#active-hour:hover {
-  background-color: #ecf2fc;
+.active-hour:hover {
+  background-color: #ecf2fc !important;
 }
 
 .weekly-weather-info > div {
@@ -684,13 +763,13 @@ p {
 
 .world-city-name > p {
   padding: 8px 0px;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: bold;
 }
 
 .world-city-temperature > p,
 .world-city-info > p {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
 }
 
 .world-city-info > p {
@@ -729,10 +808,6 @@ p {
 .world-weather-header > h4 {
   font-size: 1.2rem;
   padding-left: 16px;
-}
-
-footer {
-  padding: 10px 0px;
 }
 
 .precipitation-container {
@@ -862,6 +937,7 @@ footer {
 .sunrise-time,
 .sunset-time {
   font-size: 1.1rem;
+  font-weight: bold;
 }
 
 .weekly-weather-header h4,
@@ -954,8 +1030,28 @@ footer {
   font-size: 1.2rem;
   border: 2px solid #0e2b59;
   border-radius: 6px;
+  background-color: #edf5ff;
 }
 
 .loading > div:nth-child(2) > p:nth-child(1) {
   font-size: 1.4rem;
+}
+
+.disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.back-button:hover {
+  cursor: pointer;
+  background-color: hsl(216, 100%, 91%) !important;
+}
+
+header > h1:hover {
+  cursor: pointer;
+}
+
+svg > title {
+  display: none !important;
 }

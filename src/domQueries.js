@@ -11,6 +11,8 @@ export const DOM = {
     noResultText: document.querySelector(".loading p"),
     loadingPage: document.querySelector(".loading-page"),
     backButton: document.querySelector(".back-button"),
+    timeDisplay: document.querySelector(".time-display"),
+    logo: document.querySelector("header > h1"),
   },
   settings: {
     settings: document.querySelector("aside"),
@@ -19,6 +21,7 @@ export const DOM = {
     tickBoxes: document.querySelectorAll("#tick-box"),
     celsius: document.querySelector(".celsius"),
     fahrenheit: document.querySelector(".fahrenheit"),
+    temperatures: document.querySelectorAll(".temperature"),
   },
   loading: {},
   search: {
