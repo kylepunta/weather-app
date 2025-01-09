@@ -71,12 +71,9 @@ const weatherState = (function () {
     getWorldCities: () => state.worldCities,
     getCurrentTime: () => state.currentTime,
     setCurrentTime: () => {
-      const date = new Date();
-      const fullTime = date.toLocaleTimeString().split(":");
-      console.log("Full Time:", fullTime);
-      const timeToDisplay = fullTime[0] + ":" + fullTime[1];
-      console.log("Time to display:", timeToDisplay);
-      state.currentTime = timeToDisplay;
+      const fullTime = state.searchResult.currentConditions.datetime.split(":");
+      const time = fullTime.splice(0, 2).join(":");
+      state.currentTime = time;
     },
   };
 })();
@@ -88,13 +85,14 @@ const weather = (function () {
     console.log("Current unit", settingsState.getTemperatureUnit());
     weatherState.resetState();
     weatherState.setCurrentCity();
-    weatherState.setCurrentTime();
     console.log("Current unit", settingsState.getTemperatureUnit());
     try {
       const searchResult = await fetchSearchResult();
       console.log("Current unit", settingsState.getTemperatureUnit());
       weatherState.setSearchResult(searchResult);
       weatherState.setCurrentCountry();
+      weatherState.setCurrentTime();
+      renderSearchUI.renderCurrentTime();
       renderSearchUI.renderCityAndCountryName();
       renderSearchUI.renderCurrentWeather();
       renderSearchUI.renderHourlyWeather();

@@ -44,9 +44,6 @@ const loadingState = (function () {
 const initialize = function () {
   console.log("Initializing...");
 
-  weatherState.setCurrentTime();
-  renderSearchUI.renderCurrentTime();
-
   settingsState.setTemperatureUnit("celsius");
   eventHandler.addMenuBtnListeners();
   eventHandler.addSettingsListeners();
@@ -54,11 +51,6 @@ const initialize = function () {
   eventHandler.addArrowListeners();
   eventHandler.addBackBtnListeners();
   eventHandler.addLogoListeners();
-
-  setInterval(() => {
-    weatherState.setCurrentTime();
-    renderSearchUI.renderCurrentTime();
-  }, 60000);
 };
 
 const renderWorldUI = (function () {
@@ -165,10 +157,22 @@ const renderWorldUI = (function () {
 })();
 
 const renderSearchUI = (function () {
+  let hourlyInterval = null;
   let start = 0;
   let end = 7;
 
+  function resetHourlyWeather() {
+    if (hourlyInterval) {
+      clearInterval(hourlyInterval);
+    }
+    start = 0;
+    end = 7;
+  }
   function selectHour() {
+    DOM.hourlyWeather.hours.forEach((hour) => {
+      hour.classList.remove("first-hour");
+      hour.classList.remove("active-hour");
+    });
     const hour = weatherState.getCurrentTime().slice(0, 2);
 
     if (hour <= 16) {
@@ -178,10 +182,9 @@ const renderSearchUI = (function () {
       start = 16;
       end = 23;
     }
-    DOM.hourlyWeather.hours[start].classList.add("first-hour");
-    DOM.hourlyWeather.hours[end].classList.add("last-hour");
+    DOM.hourlyWeather.hours[start].classList.toggle("first-hour");
 
-    for (let i = parseInt(start); i <= parseInt(end); i++) {
+    for (let i = parseInt(start); i <= parseInt(start) + 7; i++) {
       DOM.hourlyWeather.hours[i].classList.toggle("active-hour");
     }
   }
@@ -325,9 +328,13 @@ const renderSearchUI = (function () {
       }
     }
 
+    renderSearchUI.resetHourlyWeather();
+
     renderSearchUI.selectHour();
 
-    setInterval(() => {
+    hourlyInterval = setInterval(() => {
+      console.log(`Start: ${start}, End: ${end}`);
+      console.log("Arrow Clicked:", loadingState.isArrowClicked());
       if (!loadingState.isArrowClicked()) {
         DOM.hourlyWeather.hours.forEach((hour) => {
           hour.classList.remove("active-hour");
@@ -341,11 +348,14 @@ const renderSearchUI = (function () {
           end++;
         }
 
-        for (let i = start; i <= end; i++) {
+        for (let i = start; i <= start + 7; i++) {
           DOM.hourlyWeather.hours[i].classList.toggle("active-hour");
         }
       }
       loadingState.setArrowClicked(false);
+      console.log("Start", start);
+      console.log("End", end);
+      console.log("Hourly Interval", hourlyInterval);
     }, 5000);
   }
   function renderWeeklyWeather() {
@@ -467,6 +477,7 @@ const renderSearchUI = (function () {
   }
 
   return {
+    resetHourlyWeather,
     selectHour,
     renderCityAndCountryName,
     renderWeeklyWeather,
