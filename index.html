@@ -1,0 +1,906 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    /><script defer src="main.js"></script></head
+  ><link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+    rel="stylesheet"
+  /><link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+    rel="stylesheet"
+  /><link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+    rel="stylesheet"
+  />
+  <body>
+    <header>
+      <h1>LunaWeather</h1>
+      <div class="menu-button">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="30px"
+          width="30px"
+          viewBox="0 0 24 24"
+        >
+          <title>menu</title>
+          <path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
+        </svg>
+      </div>
+    </header>
+    <main>
+      <section class="loading">
+        <div class="loading-page">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            style="
+              margin: auto;
+              background: none;
+              display: block;
+              fill: #b3d8f4;
+            "
+            width="100px"
+            height="100px"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="xMidYMid"
+          >
+            <circle
+              cx="50"
+              cy="50"
+              fill="none"
+              stroke="#0e2b59"
+              stroke-width="8"
+              r="35"
+              stroke-dasharray="164.93361431346415 56.97787143782138"
+            >
+              <animateTransform
+                attributeName="transform"
+                type="rotate"
+                repeatCount="indefinite"
+                dur="1s"
+                values="0 50 50;360 50 50"
+                keyTimes="0;1"
+              ></animateTransform>
+            </circle>
+          </svg>
+        </div>
+        <div class="hidden">
+          <p></p>
+          <button class="back-button">Back</button>
+        </div>
+      </section>
+      <section class="search-container hidden">
+        <form>
+          <div class="search-box">
+            <div class="search-button">
+              <svg
+                id="search-button"
+                xmlns="http://www.w3.org/2000/svg"
+                height="30px"
+                width="30px"
+                viewBox="0 0 24 24"
+              >
+                <title>magnify</title>
+                <path
+                  d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z"
+                />
+              </svg>
+            </div>
+            <label for="location"></label>
+            <input
+              type="text"
+              id="location"
+              placeholder="Search for a city/town"
+            />
+          </div>
+        </form>
+      </section>
+      <section id="city-country" class="hidden">
+        <div>
+          <div class="city-name">
+            <h4>City:</h4>
+            <p>Kilkenny</p>
+          </div>
+          <div class="country-name">
+            <h4>Country:</h4>
+            <p>Ireland</p>
+          </div>
+        </div>
+      </section>
+      <section class="current-hourly-weather-container hidden">
+        <div class="current-weather-container">
+          <div class="current-weather-header">
+            <div class="current-weather-heading">
+              <h4>Current Weather</h4>
+            </div>
+            <div class="current-time">
+              <p class="time-display">12:00</p>
+            </div>
+          </div>
+          <div class="current-weather-info">
+            <div class="weather-icon"></div>
+            <div class="temperature-icon">
+              <p class="temperature-figure temp">10°</p>
+              <p class="unit temp-unit">C</p>
+            </div>
+            <div class="current-weather-description">
+              <p>Cloudy</p>
+            </div>
+            <div class="current-weather-details">
+              <div class="wind">
+                <p>Wind</p>
+                <div class="current-weather-detail">
+                  <p class="current-wind-speed">25</p>
+                  <p id="wind-unit">KM/H</p>
+                </div>
+              </div>
+              <div class="uv-index">
+                <p>UV Index</p>
+                <div class="current-weather-detail">
+                  <p class="current-uv-index">2</p>
+                </div>
+              </div>
+              <div class="humidity">
+                <p>Humidity</p>
+                <div class="current-weather-detail">
+                  <p class="current-humidity">80</p>
+                  <p class="humidity-unit">%</p>
+                </div>
+              </div>
+              <div id="feels-like-temperature">
+                <p>Feels like</p>
+                <div class="current-weather-detail">
+                  <p class="current-feels-like-temperature">8°</p>
+                  <p class="feels-like-temp-unit temp-unit">C</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="hourly-weather-container">
+          <div class="hourly-weather-header">
+            <div>
+              <h4>Hourly Weather</h4>
+            </div>
+            <div></div>
+          </div>
+          <div class="hourly-weather-info">
+            <div class="left-arrow">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <title>arrow-left-drop-circle</title>
+                <path
+                  d="M22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12M14,7L9,12L14,17V7Z"
+                />
+              </svg>
+            </div>
+            <div class="right-arrow">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <title>arrow-right-drop-circle</title>
+                <path
+                  d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z"
+                />
+              </svg>
+            </div>
+            <div class="hours-frame">
+              <div class="hours">
+                <div id="T00">
+                  <div class="hour">
+                    <p>00</p>
+                  </div>
+                  <div class="hour-weather-icon"></div>
+                  <div class="hour-temperature">
+                    <p class="temp"></p>
+                    <p class="temp-unit hour-temp-unit"></p>
+                  </div>
+                </div>
+                <div id="T01">
+                  <div class="hour">
+                    <p>01</p>
+                  </div>
+                  <div class="hour-weather-icon"></div>
+                  <div class="hour-temperature">
+                    <p class="temp"></p>
+                    <p class="temp-unit hour-temp-unit"></p>
+                  </div>
+                </div>
+                <div id="T02">
+                  <div class="hour">
+                    <p>02</p>
+                  </div>
+                  <div class="hour-weather-icon"></div>
+                  <div class="hour-temperature">
+                    <p class="temp"></p>
+                    <p class="temp-unit hour-temp-unit"></p>
+                  </div>
+                </div>
+                <div id="T03">
+                  <div class="hour">
+                    <p>03</p>
+                  </div>
+                  <div class="hour-weather-icon"></div>
+                  <div class="hour-temperature">
+                    <p class="temp"></p>
+                    <p class="temp-unit hour-temp-unit"></p>
+                  </div>
+                </div>
+                <div id="T04">
+                  <div class="hour">
+                    <p>04</p>
+                  </div>
+                  <div class="hour-weather-icon"></div>
+                  <div class="hour-temperature">
+                    <p class="temp"></p>
+                    <p class="temp-unit hour-temp-unit"></p>
+                  </div>
+                </div>
+                <div id="T05">
+                  <div class="hour">
+                    <p>05</p>
+                  </div>
+                  <div class="hour-weather-icon"></div>
+                  <div class="hour-temperature">
+                    <p class="temp"></p>
+                    <p class="temp-unit hour-temp-unit"></p>
+                  </div>
+                </div>
+                <div id="T06">
+                  <div class="hour">
+                    <p>06</p>
+                  </div>
+                  <div class="hour-weather-icon"></div>
+                  <div class="hour-temperature">
+                    <p class="temp"></p>
+                    <p class="temp-unit hour-temp-unit"></p>
+                  </div>
+                </div>
+                <div id="T07">
+                  <div class="hour">
+                    <p>07</p>
+                  </div>
+                  <div class="hour-weather-icon"></div>
+                  <div class="hour-temperature">
+                    <p class="temp"></p>
+                    <p class="temp-unit hour-temp-unit"></p>
+                  </div>
+                </div>
+                <div id="T08">
+                  <div class="hour">
+                    <p>08</p>
+                  </div>
+                  <div class="hour-weather-icon"></div>
+                  <div class="hour-temperature">
+                    <p class="temp"></p>
+                    <p class="temp-unit hour-temp-unit"></p>
+                  </div>
+                </div>
+                <div id="T09">
+                  <div class="hour">
+                    <p>09</p>
+                  </div>
+                  <div class="hour-weather-icon"></div>
+                  <div class="hour-temperature">
+                    <p class="temp"></p>
+                    <p class="temp-unit hour-temp-unit"></p>
+                  </div>
+                </div>
+
+                <div id="T10">
+                  <div class="hour">
+                    <p>10</p>
+                  </div>
+                  <div class="hour-weather-icon"></div>
+                  <div class="hour-temperature">
+                    <p class="temp"></p>
+                    <p class="temp-unit hour-temp-unit"></p>
+                  </div>
+                </div>
+                <div id="T11">
+                  <div class="hour">
+                    <p>11</p>
+                  </div>
+                  <div class="hour-weather-icon"></div>
+                  <div class="hour-temperature">
+                    <p class="temp"></p>
+                    <p class="temp-unit hour-temp-unit"></p>
+                  </div>
+                </div>
+                <div id="T12">
+                  <div class="hour">
+                    <p>12</p>
+                  </div>
+                  <div class="hour-weather-icon"></div>
+                  <div class="hour-temperature">
+                    <p class="temp"></p>
+                    <p class="temp-unit hour-temp-unit"></p>
+                  </div>
+                </div>
+                <div id="T13">
+                  <div class="hour">
+                    <p>13</p>
+                  </div>
+                  <div class="hour-weather-icon"></div>
+                  <div class="hour-temperature">
+                    <p class="temp"></p>
+                    <p class="temp-unit hour-temp-unit"></p>
+                  </div>
+                </div>
+                <div id="T14">
+                  <div class="hour">
+                    <p>14</p>
+                  </div>
+                  <div class="hour-weather-icon"></div>
+                  <div class="hour-temperature">
+                    <p class="temp"></p>
+                    <p class="temp-unit hour-temp-unit"></p>
+                  </div>
+                </div>
+                <div id="T15">
+                  <div class="hour">
+                    <p>15</p>
+                  </div>
+                  <div class="hour-weather-icon"></div>
+                  <div class="hour-temperature">
+                    <p class="temp"></p>
+                    <p class="temp-unit hour-temp-unit"></p>
+                  </div>
+                </div>
+                <div id="T16">
+                  <div class="hour">
+                    <p>16</p>
+                  </div>
+                  <div class="hour-weather-icon"></div>
+                  <div class="hour-temperature">
+                    <p class="temp"></p>
+                    <p class="temp-unit hour-temp-unit"></p>
+                  </div>
+                </div>
+                <div id="T17">
+                  <div class="hour">
+                    <p>17</p>
+                  </div>
+                  <div class="hour-weather-icon"></div>
+                  <div class="hour-temperature">
+                    <p class="temp"></p>
+                    <p class="temp-unit hour-temp-unit"></p>
+                  </div>
+                </div>
+                <div id="T18">
+                  <div class="hour">
+                    <p>18</p>
+                  </div>
+                  <div class="hour-weather-icon"></div>
+                  <div class="hour-temperature">
+                    <p class="temp"></p>
+                    <p class="temp-unit hour-temp-unit"></p>
+                  </div>
+                </div>
+                <div id="T19">
+                  <div class="hour">
+                    <p>19</p>
+                  </div>
+                  <div class="hour-weather-icon"></div>
+                  <div class="hour-temperature">
+                    <p class="temp"></p>
+                    <p class="temp-unit hour-temp-unit"></p>
+                  </div>
+                </div>
+                <div id="T20">
+                  <div class="hour">
+                    <p>20</p>
+                  </div>
+                  <div class="hour-weather-icon"></div>
+                  <div class="hour-temperature">
+                    <p class="temp"></p>
+                    <p class="temp-unit hour-temp-unit"></p>
+                  </div>
+                </div>
+                <div id="T21">
+                  <div class="hour">
+                    <p>21</p>
+                  </div>
+                  <div class="hour-weather-icon"></div>
+                  <div class="hour-temperature">
+                    <p class="temp"></p>
+                    <p class="temp-unit hour-temp-unit"></p>
+                  </div>
+                </div>
+                <div id="T22">
+                  <div class="hour">
+                    <p>22</p>
+                  </div>
+                  <div class="hour-weather-icon"></div>
+                  <div class="hour-temperature">
+                    <p class="temp"></p>
+                    <p class="temp-unit hour-temp-unit"></p>
+                  </div>
+                </div>
+                <div id="T23">
+                  <div class="hour">
+                    <p>23</p>
+                  </div>
+                  <div class="hour-weather-icon"></div>
+                  <div class="hour-temperature">
+                    <p class="temp"></p>
+                    <p class="temp-unit hour-temp-unit"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="week-and-sun-container hidden">
+        <div class="weekly-weather-container">
+          <div class="weekly-weather-header">
+            <div>
+              <h4>7-Day Weather Forecast</h4>
+            </div>
+            <div></div>
+          </div>
+          <div class="weekly-weather-info">
+            <div class="today">
+              <div class="weekly-day">
+                <p>TODAY</p>
+              </div>
+              <div class="weekly-weather-icon"></div>
+              <div class="weekly-temperature">
+                <p class="temp"></p>
+                <p class="temp-unit"></p>
+              </div>
+              <div class="weekly-weather-description">
+                <p></p>
+              </div>
+            </div>
+            <div>
+              <div class="weekly-day">
+                <p>MON</p>
+              </div>
+              <div class="weekly-weather-icon"></div>
+              <div class="weekly-temperature">
+                <p class="temp"></p>
+                <p class="temp-unit"></p>
+              </div>
+              <div class="weekly-weather-description">
+                <p></p>
+              </div>
+            </div>
+            <div>
+              <div class="weekly-day">
+                <p>TUE</p>
+              </div>
+              <div class="weekly-weather-icon"></div>
+              <div class="weekly-temperature">
+                <p class="temp"></p>
+                <p class="temp-unit"></p>
+              </div>
+              <div class="weekly-weather-description">
+                <p></p>
+              </div>
+            </div>
+            <div>
+              <div class="weekly-day">
+                <p>WED</p>
+              </div>
+              <div class="weekly-weather-icon"></div>
+              <div class="weekly-temperature">
+                <p class="temp"></p>
+                <p class="temp-unit"></p>
+              </div>
+              <div class="weekly-weather-description">
+                <p></p>
+              </div>
+            </div>
+            <div>
+              <div class="weekly-day">
+                <p>THU</p>
+              </div>
+              <div class="weekly-weather-icon"></div>
+              <div class="weekly-temperature">
+                <p class="temp"></p>
+                <p class="temp-unit"></p>
+              </div>
+              <div class="weekly-weather-description">
+                <p></p>
+              </div>
+            </div>
+            <div>
+              <div class="weekly-day">
+                <p>FRI</p>
+              </div>
+              <div class="weekly-weather-icon"></div>
+              <div class="weekly-temperature">
+                <p class="temp"></p>
+                <p class="temp-unit"></p>
+              </div>
+              <div class="weekly-weather-description">
+                <p></p>
+              </div>
+            </div>
+            <div>
+              <div class="weekly-day">
+                <p>SAT</p>
+              </div>
+              <div class="weekly-weather-icon"></div>
+              <div class="weekly-temperature">
+                <p class="temp"></p>
+                <p class="temp-unit"></p>
+              </div>
+              <div class="weekly-weather-description">
+                <p></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="precipitation-container">
+          <div class="precipitation-header">
+            <h4>Precipitation Probability</h4>
+          </div>
+          <div class="precipitation-info">
+            <div class="precipitation">
+              <div class="precipitation-day">
+                <p>TODAY</p>
+              </div>
+              <div class="precipitation-icon"></div>
+              <div class="precipitation-chance">
+                <p>20%</p>
+              </div>
+            </div>
+            <div class="precipitation">
+              <div class="precipitation-day">
+                <p>MON</p>
+              </div>
+              <div class="precipitation-icon"></div>
+              <div class="precipitation-chance">
+                <p>20%</p>
+              </div>
+            </div>
+            <div class="precipitation">
+              <div class="precipitation-day">
+                <p>TUE</p>
+              </div>
+              <div class="precipitation-icon"></div>
+              <div class="precipitation-chance">
+                <p>20%</p>
+              </div>
+            </div>
+            <div class="precipitation">
+              <div class="precipitation-day">
+                <p>WED</p>
+              </div>
+              <div class="precipitation-icon"></div>
+              <div class="precipitation-chance">
+                <p>20%</p>
+              </div>
+            </div>
+            <div class="precipitation">
+              <div class="precipitation-day">
+                <p>THU</p>
+              </div>
+              <div class="precipitation-icon"></div>
+              <div class="precipitation-chance">
+                <p>20%</p>
+              </div>
+            </div>
+            <div class="precipitation">
+              <div class="precipitation-day">
+                <p>FRI</p>
+              </div>
+              <div class="precipitation-icon"></div>
+              <div class="precipitation-chance">
+                <p>20%</p>
+              </div>
+            </div>
+            <div class="precipitation">
+              <div class="precipitation-day">
+                <p>SAT</p>
+              </div>
+              <div class="precipitation-icon"></div>
+              <div class="precipitation-chance">
+                <p>20%</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sun-container">
+          <div class="sun-header">
+            <h4>Sunrise & Sunset</h4>
+          </div>
+          <div class="sun-info">
+            <div class="sunrise">
+              <div class="sunrise-icon">
+                <svg
+                  height="80px"
+                  width="80px"
+                  version="1.1"
+                  id="Layer_1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                  viewBox="0 0 511.984 511.984"
+                  xml:space="preserve"
+                >
+                  <g>
+                    <path
+                      style="fill: #f6bb42"
+                      d="M95.998,282.643H32c-5.891,0-10.664,4.781-10.664,10.688c0,5.875,4.773,10.656,10.664,10.656h63.998
+		c5.89,0,10.663-4.781,10.663-10.656C106.661,287.425,101.888,282.643,95.998,282.643z"
+                    />
+                    <path
+                      style="fill: #f6bb42"
+                      d="M479.985,282.643h-63.997c-5.891,0-10.656,4.781-10.656,10.672s4.766,10.672,10.656,10.672h63.997
+		c5.891,0,10.656-4.781,10.656-10.656C490.641,287.425,485.876,282.643,479.985,282.643z"
+                    />
+                  </g>
+                  <path
+                    style="fill: #ffce54"
+                    d="M406.832,127.39l-45.25,45.257c-4.155,4.164-4.155,10.914,0,15.077
+	c4.156,4.172,10.922,4.172,15.094,0l45.249-45.248c4.156-4.164,4.156-10.922,0-15.086
+	C417.769,123.226,411.004,123.226,406.832,127.39z"
+                  />
+                  <path
+                    style="fill: #f6bb42"
+                    d="M245.328,69.33v63.998c0,5.891,4.773,10.664,10.664,10.664c5.891,0,10.664-4.773,10.664-10.664V69.33
+	c0-5.89-4.773-10.671-10.664-10.671S245.328,63.44,245.328,69.33z"
+                  />
+                  <g>
+                    <path
+                      style="fill: #ffce54"
+                      d="M90.068,142.476l45.248,45.256c4.164,4.164,10.922,4.164,15.086,0
+		c4.164-4.163,4.164-10.921,0-15.085l-45.257-45.257c-4.164-4.164-10.913-4.164-15.077,0
+		C85.896,131.555,85.896,138.312,90.068,142.476z"
+                    />
+                    <path
+                      style="fill: #ffce54"
+                      d="M146.426,335.985c-5.305-13.562-7.984-27.89-7.984-42.654c0-64.826,52.732-117.559,117.551-117.559
+		c64.812,0,117.559,52.732,117.559,117.559c0,14.765-2.688,29.093-8,42.654H146.426z"
+                    />
+                  </g>
+                  <path
+                    style="fill: #f6bb42"
+                    d="M255.992,165.1c-70.811,0-128.215,57.405-128.215,128.23c0,19.03,4.148,37.076,11.586,53.311h233.25
+	c7.438-16.234,11.594-34.28,11.594-53.311C384.207,222.506,326.803,165.1,255.992,165.1z M358.02,325.329H153.972
+	c-3.234-10.296-4.867-21.014-4.867-31.998c0-28.562,11.116-55.405,31.311-75.591c20.188-20.188,47.022-31.304,75.576-31.304
+	c28.562,0,55.39,11.116,75.576,31.304c20.202,20.186,31.311,47.029,31.311,75.591C362.879,304.315,361.238,315.033,358.02,325.329z"
+                  />
+                  <path
+                    style="fill: #ed5564"
+                    d="M286.163,393.733l-22.632-22.624l0,0c-1.938-1.938-4.593-3.125-7.539-3.125l0,0
+	c-2.938,0-5.602,1.188-7.531,3.109l-0.008,0.016l-22.632,22.624c-4.164,4.156-4.164,10.906,0,15.094
+	c2.086,2.063,4.813,3.109,7.547,3.109c2.727,0,5.461-1.047,7.538-3.109l4.422-4.438v38.249c0,5.906,4.773,10.687,10.664,10.687l0,0
+	c5.891,0,10.664-4.78,10.664-10.687v-38.249l4.422,4.438c2.07,2.078,4.82,3.125,7.539,3.125c2.733,0,5.468-1.047,7.546-3.125
+	C290.335,404.655,290.335,397.889,286.163,393.733z"
+                  />
+                  <path
+                    style="fill: #656d78"
+                    d="M501.328,325.329H10.664C4.773,325.329,0,330.095,0,335.985s4.773,10.656,10.664,10.656h490.664
+	c5.875,0,10.656-4.766,10.656-10.656S507.203,325.329,501.328,325.329z"
+                  />
+                </svg>
+              </div>
+              <div class="sunrise-time">
+                <p>08:00</p>
+              </div>
+            </div>
+            <div class="sunset">
+              <div class="sunset-icon">
+                <svg
+                  height="80px"
+                  width="80px"
+                  version="1.1"
+                  id="Layer_1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                  viewBox="0 0 512 512"
+                  xml:space="preserve"
+                >
+                  <g>
+                    <path
+                      style="fill: #6e76e5"
+                      d="M318.061,387.879H256h-62.061c-12.853,0-23.273,10.418-23.273,23.273
+		c0,12.853,10.42,23.273,23.273,23.273H256h62.061c12.853,0,23.273-10.42,23.273-23.273
+		C341.333,398.297,330.913,387.879,318.061,387.879z"
+                    />
+                    <path
+                      style="fill: #6e76e5"
+                      d="M488.727,201.697h-62.768h-24.612h-25.142H256H135.795h-25.142H86.041H23.273
+		C10.42,201.697,0,212.115,0,224.97c0,12.853,10.42,23.273,23.273,23.273h80.643h0.13H256h232.727
+		c12.853,0,23.273-10.42,23.273-23.273C512,212.115,501.58,201.697,488.727,201.697z"
+                    />
+                  </g>
+                  <path
+                    style="fill: #ff6243"
+                    d="M256,77.576c-78.026,0-146.651,51.181-169.959,124.121h24.612h25.142H256h120.205h25.142h24.612
+	C402.648,128.771,333.987,77.576,256,77.576z"
+                  />
+                  <path
+                    style="fill: #6e76e5"
+                    d="M426.667,294.788H302.545c-12.853,0-23.273,10.418-23.273,23.273
+	c0,12.853,10.42,23.273,23.273,23.273h124.121c12.853,0,23.273-10.42,23.273-23.273
+	C449.939,305.206,439.519,294.788,426.667,294.788z"
+                  />
+                  <path
+                    style="fill: #b3d8f4"
+                    d="M104.046,248.242h-0.13c0.02,0,0.04,0.003,0.061,0.003
+	C103.998,248.246,104.023,248.242,104.046,248.242z"
+                  />
+                  <path
+                    style="fill: #ff0c38"
+                    d="M86.041,201.697h24.612h25.142H256V77.576l0,0C177.974,77.576,109.349,128.757,86.041,201.697z"
+                  />
+                  <g>
+                    <path
+                      style="fill: #424ede"
+                      d="M135.795,201.697h-25.142H86.041H23.273C10.42,201.697,0,212.115,0,224.97
+		c0,12.853,10.42,23.273,23.273,23.273h80.643h0.13H256v-46.545H135.795z"
+                    />
+                    <path
+                      style="fill: #424ede"
+                      d="M170.667,411.151c0,12.853,10.42,23.273,23.273,23.273H256v-46.545h-62.061
+		C181.087,387.879,170.667,398.297,170.667,411.151z"
+                    />
+                    <path
+                      style="fill: #424ede"
+                      d="M62.061,318.061c0,12.853,10.42,23.273,23.273,23.273h124.121c12.853,0,23.273-10.42,23.273-23.273
+		c0-12.854-10.42-23.273-23.273-23.273H85.333C72.481,294.788,62.061,305.206,62.061,318.061z"
+                    />
+                  </g>
+                </svg>
+              </div>
+              <div class="sunset-time">
+                <p>20:00</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="world-weather">
+        <div class="world-weather-container">
+          <div class="world-weather-header">
+            <h4>Weather Across The World</h4>
+          </div>
+          <div class="world-cities">
+            <div class="world-city">
+              <div class="world-city-name">
+                <p></p>
+              </div>
+              <div class="world-city-icon"></div>
+              <div class="world-city-temperature">
+                <p class="temp"></p>
+                <p class="temp-unit"></p>
+              </div>
+              <div class="world-city-info"></div>
+            </div>
+            <div class="world-city">
+              <div class="world-city-name">
+                <p></p>
+              </div>
+              <div class="world-city-icon"></div>
+              <div class="world-city-temperature">
+                <p class="temp"></p>
+                <p class="temp-unit"></p>
+              </div>
+              <div class="world-city-info"></div>
+            </div>
+            <div class="world-city">
+              <div class="world-city-name">
+                <p></p>
+              </div>
+              <div class="world-city-icon"></div>
+              <div class="world-city-temperature">
+                <p class="temp"></p>
+                <p class="temp-unit"></p>
+              </div>
+              <div class="world-city-info"></div>
+            </div>
+            <div class="world-city">
+              <div class="world-city-name">
+                <p></p>
+              </div>
+              <div class="world-city-icon"></div>
+              <div class="world-city-temperature">
+                <p class="temp"></p>
+                <p class="temp-unit"></p>
+              </div>
+              <div class="world-city-info"></div>
+            </div>
+            <div class="world-city">
+              <div class="world-city-name">
+                <p></p>
+              </div>
+              <div class="world-city-icon"></div>
+              <div class="world-city-temperature">
+                <p class="temp"></p>
+                <p class="temp-unit"></p>
+              </div>
+              <div class="world-city-info"></div>
+            </div>
+            <div class="world-city">
+              <div class="world-city-name">
+                <p></p>
+              </div>
+              <div class="world-city-icon"></div>
+              <div class="world-city-temperature">
+                <p class="temp"></p>
+                <p class="temp-unit"></p>
+              </div>
+              <div class="world-city-info"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <aside class="hidden">
+      <div class="settings-header">
+        <h3>Settings</h3>
+        <div class="close-settings-button">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="30px"
+            width="30px"
+            viewBox="0 0 24 24"
+          >
+            <title>window-close</title>
+            <path
+              d="M13.46,12L19,17.54V19H17.54L12,13.46L6.46,19H5V17.54L10.54,12L5,6.46V5H6.46L12,10.54L17.54,5H19V6.46L13.46,12Z"
+            />
+          </svg>
+        </div>
+      </div>
+      <div class="temperature-settings">
+        <h3>Temperature</h3>
+        <div class="temperature">
+          <div class="tick-box">
+            <svg
+              id="tick-box"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+            >
+              <title>square-rounded</title>
+              <path
+                d="M8 3H16C18.76 3 21 5.24 21 8V16C21 18.76 18.76 21 16 21H8C5.24 21 3 18.76 3 16V8C3 5.24 5.24 3 8 3Z"
+              />
+            </svg>
+          </div>
+          <p class="fahrenheit">Fahrenheit</p>
+        </div>
+        <div class="temperature">
+          <div class="tick-box">
+            <svg
+              id="tick-box"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+            >
+              <title>square-rounded</title>
+              <path
+                d="M8 3H16C18.76 3 21 5.24 21 8V16C21 18.76 18.76 21 16 21H8C5.24 21 3 18.76 3 16V8C3 5.24 5.24 3 8 3Z"
+              />
+            </svg>
+          </div>
+          <p class="celsius">Celsius</p>
+        </div>
+      </div>
+    </aside>
+    <footer>
+      <p>© 2024 LunaWeather</p>
+    </footer>
+  </body>
+</html>
